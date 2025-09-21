@@ -19,7 +19,7 @@
     </svg>
    </a>
     
-    <a href="{{ route('settings') }}" class="{{ $active === 'settings' ? $activeClass : $inactiveClass }}">
+    <a href="{{ route('settings.index') }}" class="{{ $active === 'settings' ? $activeClass : $inactiveClass }}">
         <i data-feather="settings" class="w-6 h-6"></i>
     </a>
     

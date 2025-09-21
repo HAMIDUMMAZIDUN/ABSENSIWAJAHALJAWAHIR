@@ -28,13 +28,6 @@
         </header>
 
         <div class="relative flex-grow flex items-center justify-center">
-            
-            {{-- PESAN ERROR DITAMBAHKAN DI SINI --}}
-            <div id="error-message" class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-11/12 bg-red-500/80 text-white text-center p-4 rounded-lg hidden z-30">
-                <p class="font-bold">Gagal Mengakses Kamera</p>
-                <p class="text-sm mt-1">Pastikan Anda memberikan izin dan kamera tidak digunakan aplikasi lain.</p>
-            </div>
-
             <video id="camera-feed" autoplay playsinline></video>
             
             <div class="absolute inset-0 flex items-center justify-center p-8">
@@ -55,7 +48,6 @@
             feather.replace();
 
             const videoElement = document.getElementById('camera-feed');
-            const errorMessageElement = document.getElementById('error-message'); // Definisikan elemen error
 
             // Cek dukungan browser
             if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
@@ -66,16 +58,10 @@
                     })
                     .catch(function(error) {
                         console.error("Error saat mengakses kamera: ", error);
-                        
-                        {{-- FUNGSI ALERT DIGANTI DENGAN INI --}}
-                        errorMessageElement.classList.remove('hidden');
-
+                        alert("Tidak bisa mengakses kamera. Pastikan Anda memberikan izin.");
                     });
             } else {
-                console.error("Browser Anda tidak mendukung akses kamera.");
-                errorMessageElement.querySelector('p.font-bold').innerText = 'Browser Tidak Mendukung';
-                errorMessageElement.querySelector('p.text-sm').innerText = 'Silakan gunakan browser modern seperti Chrome atau Firefox.';
-                errorMessageElement.classList.remove('hidden');
+                alert("Browser Anda tidak mendukung akses kamera.");
             }
         });
     </script>

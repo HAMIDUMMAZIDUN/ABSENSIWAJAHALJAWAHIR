@@ -21,10 +21,10 @@
     </style>
 </head>
 <body class="font-sans text-gray-900 antialiased">
-    <div class="relative min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0">
+    <div class="relative min-h-screen flex items-center justify-center p-4">
         <div class="absolute inset-0 bg-teal-800 opacity-70"></div>
 
-        <div class="relative w-full sm:max-w-md mt-6 px-8 py-10 bg-white shadow-lg overflow-hidden sm:rounded-2xl z-10">
+        <div class="relative w-full max-w-md px-6 py-8 bg-white shadow-lg overflow-hidden rounded-2xl z-10">
             <h1 class="text-3xl font-bold text-center text-gray-800 mb-8">
                 Login
             </h1>
@@ -34,14 +34,21 @@
             <form method="POST" action="{{ route('login') }}">
                 @csrf
 
+                {{-- == BAGIAN USERNAME DIUBAH == --}}
                 <div class="mb-4">
-                    <label for="email" class="block font-medium text-sm text-gray-700 mb-1">Username</label>
-                    <input id="email" type="email" name="email" :value="old('email')" required autofocus autocomplete="username" 
+                    {{-- UBAH INI: for="name" --}}
+                    <label for="name" class="block font-medium text-sm text-gray-700 mb-1">Username</label>
+                    
+                    {{-- UBAH INI: id, type, name, old() --}}
+                    <input id="name" type="text" name="name" :value="old('name')" required autofocus autocomplete="username" 
                            class="block w-full px-5 py-3 border border-gray-300 rounded-full shadow-sm focus:border-teal-500 focus:ring focus:ring-teal-200 focus:ring-opacity-50" 
                            placeholder="Ketik Username Disini">
-                    <x-input-error :messages="$errors->get('email')" class="mt-2" />
+
+                    {{-- UBAH INI: $errors->get('name') --}}
+                    <x-input-error :messages="$errors->get('name')" class="mt-2" />
                 </div>
 
+                {{-- == BAGIAN PASSWORD TETAP SAMA == --}}
                 <div class="mb-4">
                     <label for="password" class="block font-medium text-sm text-gray-700 mb-1">Kata Sandi</label>
                     <div class="relative">
@@ -78,7 +85,7 @@
             </form>
         </div>
         
-        <div class="relative text-center mt-6 z-10">
+        <div class="absolute bottom-6 text-center z-10">
             <p class="text-sm text-white">
                 Tidak Punya Akun? 
                 <a href="{{ route('register') }}" class="font-bold hover:underline">
@@ -95,10 +102,8 @@
         const eyeOffIcon = document.getElementById('eye-off-icon');
 
         togglePassword.addEventListener('click', function (e) {
-            // toggle the type attribute
             const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
             password.setAttribute('type', type);
-            // toggle the eye icon
             eyeIcon.classList.toggle('hidden');
             eyeOffIcon.classList.toggle('hidden');
         });

@@ -3,23 +3,46 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\User;
 use Illuminate\Http\Request;
+use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 
 class AdminController extends Controller
 {
+    /**
+     * Menampilkan halaman dashboard admin dengan data pengguna.
+     */
     public function index()
     {
-        // TAMBAHKAN PENGECEKAN INI DI PALING ATAS
-        if (auth()->user()->role !== 'admin') {
-            // Jika pengguna yang login BUKAN admin,
-            // tendang mereka ke dashboard biasa dengan pesan error.
-            return redirect('/dashboard')->with('error', 'Anda tidak memiliki akses ke halaman admin.');
-        }
+        $totalUsers = User::count();
+        $activeUsers = User::where('is_active', true)->count();
+        $inactiveUsers = User::where('is_active', false)->count();
 
-        // Kode di bawah ini hanya akan berjalan jika pengguna adalah admin
-        $users = User::latest()->paginate(10); 
-        
-        return view('admin.dashboard', compact('users'));
+        // Ambil daftar pengguna selain admin yang sedang login
+        $users = User::where('id', '!=', Auth::id())->latest()->paginate(10);
+
+        return view('admin.dashboard', compact(
+            'totalUsers',
+            'activeUsers',
+            'inactiveUsers',
+            'users'
+        ));
+    }
+
+    /**
+     * Mengubah status aktif/nonaktif pengguna via AJAX.
+     */
+    public function toggleUserStatus(Request $request, User $user)
+    {
+        $request->validate([
+            'is_active' => 'required|boolean',
+        ]);
+
+        $user->is_active = $request->is_active;
+        $user->save();
+
+        $message = $user->is_active ? 'diaktifkan' : 'dinonaktifkan';
+
+        return response()->json(['success' => true, 'message' => "Pengguna {$user->name} berhasil {$message}."]);
     }
 }

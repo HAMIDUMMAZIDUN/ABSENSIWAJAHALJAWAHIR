@@ -21,10 +21,12 @@
     </style>
 </head>
 <body class="font-sans text-gray-900 antialiased">
-    <div class="relative min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0">
+    {{-- WADAH UTAMA YANG DIPERBAIKI --}}
+    <div class="relative min-h-screen flex items-center justify-center p-4">
         <div class="absolute inset-0 bg-teal-800 opacity-70"></div>
 
-        <div class="relative w-full sm:max-w-md mt-6 px-8 py-10 bg-white shadow-lg overflow-hidden sm:rounded-2xl z-10">
+        {{-- KARTU DAFTAR YANG DIPERBAIKI --}}
+        <div class="relative w-full max-w-md px-6 py-8 bg-white shadow-lg overflow-hidden rounded-2xl z-10">
             <h1 class="text-3xl font-bold text-center text-gray-800 mb-8">
                 Daftar
             </h1>
@@ -40,6 +42,7 @@
                     <x-input-error :messages="$errors->get('name')" class="mt-2" />
                 </div>
 
+                {{-- Input email tersembunyi, biarkan saja --}}
                 <input type="hidden" name="email" value="{{ Str::random(10) }}@example.com">
 
                 <div class="mb-4">
@@ -50,7 +53,7 @@
                                placeholder="Ketik Kata Sandi Disini">
                         <button type="button" onclick="togglePasswordVisibility('password', 'eye-icon-1', 'eye-off-icon-1')" class="absolute inset-y-0 right-0 px-4 flex items-center text-gray-500">
                              <svg id="eye-icon-1" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>
-                             <svg id="eye-off-icon-1" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.542-7 1.274-4.057 5.064 7 9.542 7 .847 0 1.67.127 2.458.365M18.825 13.875A10.05 10.05 0 0119 12c-1.274-4.057-5.064 7-9.542 7a10.05 10.05 0 00-1.458.175M12 15a3 3 0 110-6 3 3 0 010 6z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3l18 18" /></svg>
+                             <svg id="eye-off-icon-1" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.542-7 1.274-4.057 5.064 7 9.542 7 .847 0 1.67 .127 2.458 .365M18.825 13.875A10.05 10.05 0 0119 12c-1.274-4.057-5.064 7-9.542 7a10.05 10.05 0 00-1.458 .175M12 15a3 3 0 110-6 3 3 0 010 6z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3l18 18" /></svg>
                         </button>
                     </div>
                     <x-input-error :messages="$errors->get('password')" class="mt-2" />
@@ -61,10 +64,10 @@
                     <div class="relative">
                         <input id="password_confirmation" type="password" name="password_confirmation" required autocomplete="new-password" 
                                class="block w-full px-5 py-3 border border-gray-300 rounded-full shadow-sm focus:border-teal-500 focus:ring focus:ring-teal-200 focus:ring-opacity-50" 
-                               placeholder="Ketik Kata Sandi Disini">
+                               placeholder="Ketik Ulang Kata Sandi">
                         <button type="button" onclick="togglePasswordVisibility('password_confirmation', 'eye-icon-2', 'eye-off-icon-2')" class="absolute inset-y-0 right-0 px-4 flex items-center text-gray-500">
                              <svg id="eye-icon-2" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>
-                             <svg id="eye-off-icon-2" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.542-7 1.274-4.057 5.064 7 9.542 7 .847 0 1.67.127 2.458.365M18.825 13.875A10.05 10.05 0 0119 12c-1.274-4.057-5.064 7-9.542 7a10.05 10.05 0 00-1.458.175M12 15a3 3 0 110-6 3 3 0 010 6z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3l18 18" /></svg>
+                             <svg id="eye-off-icon-2" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.542-7 1.274-4.057 5.064 7 9.542 7 .847 0 1.67 .127 2.458 .365M18.825 13.875A10.05 10.05 0 0119 12c-1.274-4.057-5.064 7-9.542 7a10.05 10.05 0 00-1.458 .175M12 15a3 3 0 110-6 3 3 0 010 6z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3l18 18" /></svg>
                         </button>
                     </div>
                     <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
@@ -78,7 +81,7 @@
             </form>
         </div>
         
-        <div class="relative text-center mt-6 z-10">
+        <div class="absolute bottom-6 text-center z-10">
             <p class="text-sm text-white">
                 Sudah Punya Akun? 
                 <a href="{{ route('login') }}" class="font-bold hover:underline">
