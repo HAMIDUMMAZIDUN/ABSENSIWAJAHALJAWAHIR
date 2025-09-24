@@ -11,7 +11,7 @@
             <h1 class="text-xl font-bold text-gray-800 dark:text-gray-200 truncate">{{ $user->name }}</h1>
         </div>
         <div class="flex items-center space-x-3">
-             {{-- Tambahkan class dark mode --}}
+            {{-- Tambahkan class dark mode --}}
             <button class="p-2 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-full text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600">
                 <i data-feather="search" class="w-5 h-5"></i>
             </button>

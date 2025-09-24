@@ -21,11 +21,9 @@
     </style>
 </head>
 <body class="font-sans text-gray-900 antialiased">
-    {{-- WADAH UTAMA YANG DIPERBAIKI --}}
     <div class="relative min-h-screen flex items-center justify-center p-4">
         <div class="absolute inset-0 bg-teal-800 opacity-70"></div>
 
-        {{-- KARTU DAFTAR YANG DIPERBAIKI --}}
         <div class="relative w-full max-w-md px-6 py-8 bg-white shadow-lg overflow-hidden rounded-2xl z-10">
             <h1 class="text-3xl font-bold text-center text-gray-800 mb-8">
                 Daftar
@@ -78,18 +76,19 @@
                         Daftar
                     </button>
                 </div>
-            </form>
+
+                <div class="text-center mt-6">
+                    <p class="text-sm text-gray-600">
+                        Sudah Punya Akun? 
+                        <a href="{{ route('login') }}" class="font-bold text-teal-600 hover:underline">
+                            Masuk
+                        </a>
+                    </p>
+                </div>
+                </form>
         </div>
         
-        <div class="absolute bottom-6 text-center z-10">
-            <p class="text-sm text-white">
-                Sudah Punya Akun? 
-                <a href="{{ route('login') }}" class="font-bold hover:underline">
-                    Masuk
-                </a>
-            </p>
         </div>
-    </div>
 
     <script>
         function togglePasswordVisibility(fieldId, eyeId, eyeOffId) {

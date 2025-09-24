@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
 use Illuminate\View\View;
+use Illuminate\Support\Str; // <-- Tambahkan ini
 
 class RegisteredUserController extends Controller
 {
@@ -29,15 +30,16 @@ class RegisteredUserController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
+        // 1. Validasi diubah: 'name' harus unik, 'email' tidak divalidasi dari input
         $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
+            'name' => ['required', 'string', 'max:255', 'unique:'.User::class],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
+        // 2. Pembuatan User diubah: Email dibuat unik secara otomatis
         $user = User::create([
             'name' => $request->name,
-            'email' => $request->email,
+            'email' => Str::uuid()->toString() . '@example.com', // Membuat email unik
             'password' => Hash::make($request->password),
         ]);
 

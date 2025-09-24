@@ -32,14 +32,6 @@
                 <span>Ganti Kata Sandi</span>
                 <i data-feather="chevron-right" class="w-5 h-5 text-gray-400"></i>
             </a>
-      
-            <div class="flex justify-between items-center py-3 text-gray-800 dark:text-gray-200 px-2">
-                <span>Mode Gelap</span>
-                <label class="inline-flex items-center cursor-pointer">
-                    <input type="checkbox" id="theme-toggle" class="sr-only peer">
-                    <div class="relative w-11 h-6 bg-gray-200 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:bg-gray-600 peer-checked:bg-teal-600"></div>
-                </label>
-            </div>
         </div>
     </section>
 

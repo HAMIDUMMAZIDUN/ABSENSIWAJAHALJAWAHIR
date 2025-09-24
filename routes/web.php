@@ -48,11 +48,23 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/username', [SettingsController::class, 'showUsernameForm'])->name('username');
         Route::post('/username', [SettingsController::class, 'updateUsername'])->name('username.update');
         Route::get('/password', [SettingsController::class, 'showPasswordForm'])->name('password');
+        
+        // Catatan: Route untuk 'updatePassword' seharusnya menggunakan PUT/PATCH, tapi POST juga bisa berfungsi.
+        // Jika Anda menggunakan form Laravel Breeze asli, route 'password.update' sudah ada di auth.php
+        // Jadi, Anda mungkin bisa menghapus route di bawah ini jika sudah terdefinisi.
         Route::post('/password', [SettingsController::class, 'updatePassword'])->name('password.update');
+        
+        // == RUTE PHONE DIPINDAHKAN KE SINI ==
+        Route::get('/phone', [SettingsController::class, 'showPhoneForm'])->name('phone');
+        Route::post('/phone', [SettingsController::class, 'updatePhone'])->name('phone.update');
+        // ===================================
+        
         Route::post('/notifications', [SettingsController::class, 'updateNotifications'])->name('notifications.update');
         Route::post('/theme', [SettingsController::class, 'updateTheme'])->name('theme.update');
     });
 });
+
+// Rute untuk phone yang salah posisi sudah dihapus dari sini.
 
 // Rute Autentikasi
 require __DIR__.'/auth.php';

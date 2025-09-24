@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\Password;
 
 class SettingsController extends Controller
@@ -68,6 +70,41 @@ class SettingsController extends Controller
     }
     
     /**
+     * Menampilkan form untuk mengubah nomor handphone.
+     */
+    public function showPhoneForm()
+    {
+        return view('settings.phone', [
+            'user' => Auth::user()
+        ]);
+    }
+
+    /**
+     * Memproses pembaruan nomor handphone.
+     */
+    public function updatePhone(Request $request)
+    {
+        $user = Auth::user();
+
+        // Validasi input nomor handphone
+        $request->validate([
+            'phone' => [
+                'required',
+                'numeric',      // Pastikan hanya angka
+                'min:10',       // Minimal 10 digit
+                Rule::unique('users')->ignore($user->id), // Unik, kecuali untuk user itu sendiri
+            ],
+        ]);
+
+        // Simpan perubahan ke database
+        $user->phone = $request->phone;
+        $user->save();
+
+        // Arahkan kembali ke halaman profil dengan pesan sukses
+        return redirect()->route('profile.edit')->with('status', 'Nomor handphone berhasil diperbarui.');
+    }
+
+    /**
      * Memproses pembaruan notifikasi via AJAX/Fetch.
      */
     public function updateNotifications(Request $request)
@@ -87,7 +124,6 @@ class SettingsController extends Controller
         return response()->json(['message' => 'Preferensi notifikasi diperbarui.']);
     }
 
-    // ===== TAMBAHKAN FUNGSI INI =====
     /**
      * Memproses pembaruan tema via AJAX/Fetch.
      */
@@ -103,5 +139,4 @@ class SettingsController extends Controller
         
         return response()->json(['message' => 'Tema berhasil diperbarui.']);
     }
-    // ===================================
 }

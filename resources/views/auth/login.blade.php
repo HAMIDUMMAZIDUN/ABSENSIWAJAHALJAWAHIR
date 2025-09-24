@@ -34,21 +34,16 @@
             <form method="POST" action="{{ route('login') }}">
                 @csrf
 
-                {{-- == BAGIAN USERNAME DIUBAH == --}}
+                {{-- == BAGIAN USERNAME == --}}
                 <div class="mb-4">
-                    {{-- UBAH INI: for="name" --}}
                     <label for="name" class="block font-medium text-sm text-gray-700 mb-1">Username</label>
-                    
-                    {{-- UBAH INI: id, type, name, old() --}}
                     <input id="name" type="text" name="name" :value="old('name')" required autofocus autocomplete="username" 
                            class="block w-full px-5 py-3 border border-gray-300 rounded-full shadow-sm focus:border-teal-500 focus:ring focus:ring-teal-200 focus:ring-opacity-50" 
                            placeholder="Ketik Username Disini">
-
-                    {{-- UBAH INI: $errors->get('name') --}}
                     <x-input-error :messages="$errors->get('name')" class="mt-2" />
                 </div>
 
-                {{-- == BAGIAN PASSWORD TETAP SAMA == --}}
+                {{-- == BAGIAN PASSWORD == --}}
                 <div class="mb-4">
                     <label for="password" class="block font-medium text-sm text-gray-700 mb-1">Kata Sandi</label>
                     <div class="relative">
@@ -76,22 +71,21 @@
                         </a>
                     @endif
                 </div>
-
+                
                 <div class="flex items-center justify-end">
                     <button type="submit" class="w-full bg-teal-600 hover:bg-teal-700 text-white font-bold py-3 px-4 rounded-full focus:outline-none focus:shadow-outline transition duration-150 ease-in-out">
                         Masuk
                     </button>
                 </div>
-            </form>
-        </div>
-        
-        <div class="absolute bottom-6 text-center z-10">
-            <p class="text-sm text-white">
-                Tidak Punya Akun? 
-                <a href="{{ route('register') }}" class="font-bold hover:underline">
-                    Sign Up
-                </a>
-            </p>
+
+                <div class="text-center mt-6"> <p class="text-sm text-gray-600">
+                        Tidak Punya Akun? 
+                        <a href="{{ route('register') }}" class="font-bold text-teal-600 hover:underline">
+                            Sign Up
+                        </a>
+                    </p>
+                </div>
+                </form>
         </div>
     </div>
 
