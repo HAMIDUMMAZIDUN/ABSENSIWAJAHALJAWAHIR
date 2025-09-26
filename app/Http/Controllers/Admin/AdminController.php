@@ -14,11 +14,12 @@ class AdminController extends Controller
      */
     public function index()
     {
+        // KEMBALI KE VERSI AWAL: Statistik menghitung semua user
         $totalUsers = User::count();
         $activeUsers = User::where('is_active', true)->count();
         $inactiveUsers = User::where('is_active', false)->count();
 
-        // Ambil daftar pengguna selain admin yang sedang login
+        // KEMBALI KE VERSI AWAL: Daftar pengguna hanya menyembunyikan admin yang sedang login
         $users = User::where('id', '!=', Auth::id())->latest()->paginate(10);
 
         return view('admin.dashboard', compact(
@@ -34,6 +35,15 @@ class AdminController extends Controller
      */
     public function toggleUserStatus(Request $request, User $user)
     {
+        // PERUBAHAN: Hanya memeriksa apakah admin mencoba menonaktifkan diri sendiri.
+        // Logika untuk admin lain dihapus.
+        if ($user->id === Auth::id()) {
+            return response()->json([
+                'success' => false, 
+                'message' => 'Aksi tidak diizinkan. Anda tidak dapat mengubah status akun Anda sendiri.'
+            ], 403); // 403 Forbidden
+        }
+
         $request->validate([
             'is_active' => 'required|boolean',
         ]);

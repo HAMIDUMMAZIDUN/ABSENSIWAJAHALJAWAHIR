@@ -62,7 +62,7 @@ class Kernel extends HttpKernel
     'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
     'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
     
-    // Cukup satu baris ini saja untuk admin
-    'admin' => \App\Http\Middleware\IsAdminMiddleware::class, 
+    // Pastikan nama class-nya IsAdminMiddleware
+    'cek.admin' => \App\Http\Middleware\IsAdminMiddleware::class,
 ];
 }

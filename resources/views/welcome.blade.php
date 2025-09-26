@@ -6,52 +6,63 @@
     <title>Selamat Datang - Absensi Guru</title>
 
     <link rel="preconnect" href="https://fonts.bunny.net">
-    <link href="https://fonts.bunny.net/css?family=plus-jakarta-sans:400,700,800" rel="stylesheet" />
+    <link href="https://fonts.bunny.net/css?family=plus-jakarta-sans:400,500,700,800&display=swap" rel="stylesheet" />
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
     <style>
-        /* Menambahkan gambar latar belakang ke div */
-        .bg-hero-image {
-            background-image: url('/images/sakola.jpg');
-        }
+        .bg-hero-image { background-image: url('/images/sakola.jpg'); }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        .animate-fadeInUp { animation: fadeInUp 0.8s ease-out forwards; }
+        .animate-fadeIn { animation: fadeIn 0.8s ease-out forwards; }
+        .delay-200 { animation-delay: 200ms; }
+        .delay-400 { animation-delay: 400ms; }
+        .delay-600 { animation-delay: 600ms; }
     </style>
 </head>
-<body class="font-sans antialiased">
-    <div class="relative flex flex-col min-h-screen bg-white">
+<body class="font-sans antialiased text-gray-800 bg-gray-900">
+    <div class="relative min-h-screen overflow-hidden">
+        <div class="absolute inset-0 bg-hero-image bg-cover bg-center"></div>
+        <div class="absolute inset-0 bg-gradient-to-br from-teal-900/80 to-gray-900/90"></div>
 
-        {{-- Bagian Header dengan Gambar --}}
-        <div class="relative w-full h-[40vh] bg-hero-image bg-cover bg-center">
-            <div class="absolute inset-0 bg-teal-800 opacity-70"></div>
-            <div class="absolute bottom-0 w-full text-white">   
-            </div>
-        </div>
+        <header class="absolute top-0 left-0 right-0 z-20 animate-fadeIn">
+        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+                <a href="/" class="block">
+                    <img src="{{ asset('images/logo-pesantren.png') }}" alt="Logo Pesantren" class="h-10 w-auto">
+                </a>
 
-        {{-- Bagian Konten Utama --}}
-        <div class="flex flex-1 flex-col justify-center items-center px-6 -mt-10 z-10">
-            <div class="w-full max-w-md text-center">
-                <h1 class="text-4xl md:text-5xl font-extrabold text-gray-900">
-                    Selamat Datang
+                <div class="flex items-center gap-4">
+                    <a href="{{ route('login') }}" class="text-white font-medium hover:text-teal-300 transition-colors duration-300">
+                        Login
+                    </a>
+                    @if (Route::has('register'))
+                        <a href="{{ route('register') }}" class="px-5 py-2 text-sm font-bold text-teal-800 bg-white rounded-full shadow-lg transition-transform duration-300 ease-in-out hover:bg-gray-200 hover:scale-105">
+                            Register
+                        </a>
+                    @endif
+                </div>
+            </nav>
+        </header>
+
+        <main class="relative z-10 flex items-center justify-center min-h-screen">
+            <div class="max-w-4xl px-6 text-center text-white">
+                <h1 class="text-4xl font-extrabold leading-tight tracking-tight md:text-6xl drop-shadow-md animate-fadeInUp" style="opacity: 0;">
+                    Sistem Presensi Modern untuk Pendidik
                 </h1>
-                <p class="mt-2 text-base text-gray-700 font-bold">
-                    di aplikasi absensi guru Pondok Pesantren Salafiyah Al-Jawahir Berbasis Web.
+                <p class="mt-4 text-lg font-medium text-teal-100/90 md:text-xl drop-shadow animate-fadeInUp delay-200" style="opacity: 0;">
+                    Pondok Pesantren Salafiyah Al-Jawahir
                 </p>
-                <p class="mt-4 text-sm text-gray-500">
-                    Aplikasi ini memudahkan Bapak/Ibu guru dalam melakukan presensi harian secara digital, sehingga proses pencatatan kehadiran menjadi lebih cepat, akurat, dan efisien.
+                <p class="max-w-2xl mx-auto mt-6 text-base text-gray-300 md:text-lg animate-fadeInUp delay-400" style="opacity: 0;">
+                    Mudahkan pencatatan kehadiran harian Anda dengan sistem digital yang cepat, akurat, dan efisien. Fokus pada mengajar, biarkan kami yang mengurus administrasi.
                 </p>
-
-                <div class="mt-12 flex justify-end">
-                    <a href="{{ route('login') }}" class="inline-flex items-center space-x-3 text-lg font-bold text-gray-800 transition hover:text-teal-600">
-                        <span>Login</span>
-                        <span class="flex items-center justify-center w-12 h-12 rounded-full border-2 border-gray-300 transition group-hover:border-teal-600">
-                            <svg class="w-6 h-6 text-gray-500 transition group-hover:text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
-                            </svg>
-                        </span>
+                <div class="mt-12 animate-fadeInUp delay-600" style="opacity: 0;">
+                    <a href="{{ route('login') }}" class="inline-flex items-center justify-center px-10 py-4 text-lg font-bold text-white bg-teal-500 rounded-full shadow-xl transition-transform duration-300 ease-in-out hover:bg-teal-600 hover:scale-105">
+                        Mulai Absensi
                     </a>
                 </div>
             </div>
-        </div>
+        </main>
     </div>
 </body>
 </html>

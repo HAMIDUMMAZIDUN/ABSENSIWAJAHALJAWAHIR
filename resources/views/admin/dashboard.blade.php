@@ -3,6 +3,9 @@
 @section('title', 'Admin Dashboard')
 
 @section('content')
+    {{-- Notifikasi Toast akan muncul di sini --}}
+    <div id="toast-container" class="fixed top-5 right-5 z-50 space-y-2"></div>
+
     <section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
         <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-md">
             <h3 class="text-sm font-medium text-gray-500 dark:text-gray-400">Total Pengguna</h3>
@@ -39,7 +42,10 @@
                         <td class="px-6 py-4">{{ $user->email }}</td>
                         <td class="px-6 py-4">
                             <label class="inline-flex items-center cursor-pointer">
-                                <input type="checkbox" data-user-id="{{ $user->id }}" class="sr-only peer user-status-toggle" @checked($user->is_active)>
+                                <input type="checkbox" 
+                                       data-url="{{ route('admin.users.toggle-status', $user) }}" 
+                                       class="sr-only peer user-status-toggle" 
+                                       @checked($user->is_active)>
                                 <div class="relative w-11 h-6 bg-gray-200 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:bg-gray-600 peer-checked:bg-teal-600"></div>
                             </label>
                         </td>
@@ -60,43 +66,48 @@
 
 @push('scripts')
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+document.addEventListener('DOMContentLoaded', function () {
+    const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
-        document.querySelectorAll('.user-status-toggle').forEach(toggle => {
-            toggle.addEventListener('change', async function (event) {
-                const userId = this.dataset.userId;
-                const newStatus = this.checked;
-                const url = `/admin/users/${userId}/toggle-status`;
+    function showToast(message, isSuccess = true) {
+        const container = document.getElementById('toast-container');
+        const toast = document.createElement('div');
+        const bgColor = isSuccess ? 'bg-teal-500' : 'bg-red-500';
+        toast.className = `max-w-xs ${bgColor} text-sm text-white rounded-md shadow-lg p-4 transition-transform transform translate-x-full`;
+        toast.textContent = message;
+        container.appendChild(toast);
+        setTimeout(() => toast.classList.remove('translate-x-full'), 100);
+        setTimeout(() => {
+            toast.classList.add('translate-x-full');
+            setTimeout(() => toast.remove(), 500);
+        }, 3000);
+    }
 
-                try {
-                    const response = await fetch(url, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'X-CSRF-TOKEN': csrfToken,
-                            'Accept': 'application/json'
-                        },
-                        body: JSON.stringify({
-                            is_active: newStatus
-                        })
-                    });
+    document.querySelectorAll('.user-status-toggle').forEach(toggle => {
+        toggle.addEventListener('change', async function (event) {
+            const url = this.dataset.url; 
+            const newStatus = this.checked;
 
-                    if (!response.ok) {
-                        throw new Error('Gagal memperbarui status.');
-                    }
-
-                    const result = await response.json();
-                    // Anda bisa mengganti alert() dengan notifikasi yang lebih baik
-                    alert(result.message);
-
-                } catch (error) {
-                    console.error('Terjadi kesalahan:', error);
-                    alert('Gagal memperbarui status. Silakan coba lagi.');
-                    event.target.checked = !newStatus; 
-                }
-            });
+            try {
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': csrfToken,
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify({ is_active: newStatus })
+                });
+                const result = await response.json();
+                if (!response.ok) { throw new Error(result.message || 'Gagal memperbarui status.'); }
+                showToast(result.message, true);
+            } catch (error) {
+                console.error('Terjadi kesalahan:', error);
+                showToast(error.message, false);
+                event.target.checked = !newStatus; 
+            }
         });
     });
+});
 </script>
 @endpush
