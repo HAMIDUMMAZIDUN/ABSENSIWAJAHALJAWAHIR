@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
 use Illuminate\View\View;
-use Illuminate\Support\Str; // <-- Tambahkan ini
+use Illuminate\Support\Str;
 
 class RegisteredUserController extends Controller
 {
@@ -30,16 +30,18 @@ class RegisteredUserController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
-        // 1. Validasi diubah: 'name' harus unik, 'email' tidak divalidasi dari input
+        // Validasi diubah: tambahkan validasi untuk 'phone'
         $request->validate([
             'name' => ['required', 'string', 'max:255', 'unique:'.User::class],
+            'phone' => ['required', 'string', 'max:15', 'unique:'.User::class], // Validasi untuk phone
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
-        // 2. Pembuatan User diubah: Email dibuat unik secara otomatis
+        // Pembuatan User diubah: tambahkan 'phone'
         $user = User::create([
             'name' => $request->name,
-            'email' => Str::uuid()->toString() . '@example.com', // Membuat email unik
+            'email' => Str::uuid()->toString() . '@example.com',
+            'phone' => $request->phone, // Simpan nomor handphone
             'password' => Hash::make($request->password),
         ]);
 

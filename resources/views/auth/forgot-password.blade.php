@@ -29,21 +29,25 @@
                 Lupa Kata Sandi
             </h1>
 
+            {{-- Deskripsi diubah untuk nomor handphone --}}
             <p class="text-center text-sm text-gray-600 mb-6">
-                Lupa kata sandi Anda? Tidak masalah. Beri tahu kami alamat email Anda dan kami akan mengirimkan link untuk mengatur ulang kata sandi baru.
+                Tidak masalah. Beri tahu kami nomor handphone Anda yang terdaftar dan kami akan mengirimkan link untuk mengatur ulang kata sandi.
             </p>
 
+            {{-- Menampilkan status sukses --}}
             <x-auth-session-status class="mb-4" :status="session('status')" />
 
-            <form method="POST" action="{{ route('password.email') }}">
+            <form method="POST" action="{{ route('password.email') }}"> {{-- Nama rute tetap 'password.email' untuk kompatibilitas --}}
                 @csrf
 
+                {{-- Input diubah dari email menjadi nomor handphone --}}
                 <div class="mb-4">
-                    <label for="email" class="block font-medium text-sm text-gray-700 mb-1">Email</label>
-                    <input id="email" type="email" name="email" :value="old('email')" required autofocus
+                    <label for="phone" class="block font-medium text-sm text-gray-700 mb-1">No. Handphone</label>
+                    <input id="phone" type="text" name="phone" :value="old('phone')" required autofocus
                            class="block w-full px-5 py-3 border border-gray-300 rounded-full shadow-sm focus:border-teal-500 focus:ring focus:ring-teal-200 focus:ring-opacity-50" 
-                           placeholder="Ketik Email Anda">
-                    <x-input-error :messages="$errors->get('email')" class="mt-2" />
+                           placeholder="Ketik Nomor Handphone Anda">
+                    {{-- Menampilkan error untuk field 'phone' --}}
+                    <x-input-error :messages="$errors->get('phone')" class="mt-2" />
                 </div>
 
                 <div class="flex items-center justify-end mt-6">

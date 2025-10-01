@@ -28,6 +28,8 @@
             <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
                 <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                     <tr>
+                        {{-- TAMBAHKAN KOLOM FOTO --}}
+                        <th scope="col" class="px-6 py-3">Foto</th>
                         <th scope="col" class="px-6 py-3">Nama</th>
                         <th scope="col" class="px-6 py-3">Email</th>
                         <th scope="col" class="px-6 py-3">Status Login</th>
@@ -36,6 +38,10 @@
                 <tbody>
                     @forelse ($users as $user)
                     <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                        {{-- TAMPILKAN FOTO PENGGUNA DI SINI --}}
+                        <td class="px-6 py-4">
+                            <img src="{{ $user->photo ? Storage::url($user->photo) : asset('images/default-avatar.png') }}" alt="Foto {{ $user->name }}" class="w-10 h-10 rounded-full object-cover">
+                        </td>
                         <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                             {{ $user->name }}
                         </td>
@@ -52,7 +58,8 @@
                     </tr>
                     @empty
                     <tr>
-                        <td colspan="3" class="px-6 py-4 text-center">Tidak ada pengguna untuk ditampilkan.</td>
+                        {{-- Sesuaikan colspan karena ada penambahan kolom --}}
+                        <td colspan="4" class="px-6 py-4 text-center">Tidak ada pengguna untuk ditampilkan.</td>
                     </tr>
                     @endforelse
                 </tbody>

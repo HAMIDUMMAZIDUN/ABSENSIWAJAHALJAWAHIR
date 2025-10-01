@@ -1,4 +1,4 @@
-@extends('layouts.app-mobile')
+@extends('layouts.app')
 
 @section('title', 'Pengaturan')
 
@@ -24,11 +24,11 @@
             <span>Akun</span>
         </h2>
         <div class="mt-4 space-y-2">
-            <a href="{{ route('settings.username') }}" class="flex justify-between items-center py-3 text-gray-800 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg px-2">
+            <a href="{{ route('app.settings.username') }}" class="flex justify-between items-center py-3 text-gray-800 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg px-2">
                 <span>Ganti Username</span>
                 <i data-feather="chevron-right" class="w-5 h-5 text-gray-400"></i>
             </a>
-            <a href="{{ route('settings.password') }}" class="flex justify-between items-center py-3 text-gray-800 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg px-2">
+            <a href="{{ route('app.settings.password') }}" class="flex justify-between items-center py-3 text-gray-800 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 rounded-lg px-2">
                 <span>Ganti Kata Sandi</span>
                 <i data-feather="chevron-right" class="w-5 h-5 text-gray-400"></i>
             </a>
@@ -79,7 +79,7 @@
             const status = this.checked;
 
             // Gunakan variabel csrfToken yang sudah ada
-            fetch("{{ route('settings.notifications.update') }}", {
+            fetch("{{ route('app.settings.notifications.update') }}", {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -120,7 +120,7 @@
             }
 
             // Gunakan variabel csrfToken yang sudah ada
-            fetch("{{ route('settings.theme.update') }}", {
+            fetch("{{ route('app.settings.theme.update') }}", {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

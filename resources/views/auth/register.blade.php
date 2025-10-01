@@ -32,6 +32,7 @@
             <form method="POST" action="{{ route('register') }}">
                 @csrf
 
+                {{-- Input Username --}}
                 <div class="mb-4">
                     <label for="name" class="block font-medium text-sm text-gray-700 mb-1">Username</label>
                     <input id="name" type="text" name="name" :value="old('name')" required autofocus autocomplete="name" 
@@ -39,10 +40,20 @@
                            placeholder="Ketik Username Disini">
                     <x-input-error :messages="$errors->get('name')" class="mt-2" />
                 </div>
+                
+                {{-- TAMBAHAN: Input Nomor Handphone --}}
+                <div class="mb-4">
+                    <label for="phone" class="block font-medium text-sm text-gray-700 mb-1">No. Handphone</label>
+                    <input id="phone" type="text" name="phone" :value="old('phone')" required 
+                           class="block w-full px-5 py-3 border border-gray-300 rounded-full shadow-sm focus:border-teal-500 focus:ring focus:ring-teal-200 focus:ring-opacity-50" 
+                           placeholder="Ketik No. Handphone">
+                    <x-input-error :messages="$errors->get('phone')" class="mt-2" />
+                </div>
 
                 {{-- Input email tersembunyi, biarkan saja --}}
                 <input type="hidden" name="email" value="{{ Str::random(10) }}@example.com">
 
+                {{-- Input Password --}}
                 <div class="mb-4">
                     <label for="password" class="block font-medium text-sm text-gray-700 mb-1">Kata Sandi</label>
                     <div class="relative">
@@ -50,13 +61,14 @@
                                class="block w-full px-5 py-3 border border-gray-300 rounded-full shadow-sm focus:border-teal-500 focus:ring focus:ring-teal-200 focus:ring-opacity-50" 
                                placeholder="Ketik Kata Sandi Disini">
                         <button type="button" onclick="togglePasswordVisibility('password', 'eye-icon-1', 'eye-off-icon-1')" class="absolute inset-y-0 right-0 px-4 flex items-center text-gray-500">
-                             <svg id="eye-icon-1" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>
-                             <svg id="eye-off-icon-1" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.542-7 1.274-4.057 5.064 7 9.542 7 .847 0 1.67 .127 2.458 .365M18.825 13.875A10.05 10.05 0 0119 12c-1.274-4.057-5.064 7-9.542 7a10.05 10.05 0 00-1.458 .175M12 15a3 3 0 110-6 3 3 0 010 6z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3l18 18" /></svg>
+                            <svg id="eye-icon-1" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>
+                            <svg id="eye-off-icon-1" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.542-7 1.274-4.057 5.064 7 9.542 7 .847 0 1.67 .127 2.458 .365M18.825 13.875A10.05 10.05 0 0119 12c-1.274-4.057-5.064 7-9.542 7a10.05 10.05 0 00-1.458 .175M12 15a3 3 0 110-6 3 3 0 010 6z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3l18 18" /></svg>
                         </button>
                     </div>
                     <x-input-error :messages="$errors->get('password')" class="mt-2" />
                 </div>
 
+                {{-- Konfirmasi Password --}}
                 <div class="mb-8">
                     <label for="password_confirmation" class="block font-medium text-sm text-gray-700 mb-1">Verifikasi Kata Sandi</label>
                     <div class="relative">
@@ -64,8 +76,8 @@
                                class="block w-full px-5 py-3 border border-gray-300 rounded-full shadow-sm focus:border-teal-500 focus:ring focus:ring-teal-200 focus:ring-opacity-50" 
                                placeholder="Ketik Ulang Kata Sandi">
                         <button type="button" onclick="togglePasswordVisibility('password_confirmation', 'eye-icon-2', 'eye-off-icon-2')" class="absolute inset-y-0 right-0 px-4 flex items-center text-gray-500">
-                             <svg id="eye-icon-2" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>
-                             <svg id="eye-off-icon-2" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.542-7 1.274-4.057 5.064 7 9.542 7 .847 0 1.67 .127 2.458 .365M18.825 13.875A10.05 10.05 0 0119 12c-1.274-4.057-5.064 7-9.542 7a10.05 10.05 0 00-1.458 .175M12 15a3 3 0 110-6 3 3 0 010 6z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3l18 18" /></svg>
+                            <svg id="eye-icon-2" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>
+                            <svg id="eye-off-icon-2" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.542-7 1.274-4.057 5.064 7 9.542 7 .847 0 1.67 .127 2.458 .365M18.825 13.875A10.05 10.05 0 0119 12c-1.274-4.057-5.064 7-9.542 7a10.05 10.05 0 00-1.458 .175M12 15a3 3 0 110-6 3 3 0 010 6z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3l18 18" /></svg>
                         </button>
                     </div>
                     <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
