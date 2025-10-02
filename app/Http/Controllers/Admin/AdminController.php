@@ -9,50 +9,57 @@ use Illuminate\Support\Facades\Auth;
 
 class AdminController extends Controller
 {
-    /**
-     * Menampilkan halaman dashboard admin dengan data pengguna.
-     */
     public function index()
     {
-        // KEMBALI KE VERSI AWAL: Statistik menghitung semua user
-        $totalUsers = User::count();
-        $activeUsers = User::where('is_active', true)->count();
-        $inactiveUsers = User::where('is_active', false)->count();
-
-        // KEMBALI KE VERSI AWAL: Daftar pengguna hanya menyembunyikan admin yang sedang login
         $users = User::where('id', '!=', Auth::id())->latest()->paginate(10);
-
-        return view('admin.dashboard', compact(
-            'totalUsers',
-            'activeUsers',
-            'inactiveUsers',
-            'users'
-        ));
+        
+        return view('admin.dashboard', array_merge($this->getUserStats(), [
+            'users' => $users
+        ]));
     }
 
-    /**
-     * Mengubah status aktif/nonaktif pengguna via AJAX.
-     */
     public function toggleUserStatus(Request $request, User $user)
     {
-        // PERUBAHAN: Hanya memeriksa apakah admin mencoba menonaktifkan diri sendiri.
-        // Logika untuk admin lain dihapus.
         if ($user->id === Auth::id()) {
-            return response()->json([
-                'success' => false, 
-                'message' => 'Aksi tidak diizinkan. Anda tidak dapat mengubah status akun Anda sendiri.'
-            ], 403); // 403 Forbidden
+            return response()->json(['message' => 'Aksi tidak diizinkan. Anda tidak dapat mengubah status akun Anda sendiri.'], 403);
         }
 
-        $request->validate([
-            'is_active' => 'required|boolean',
-        ]);
+        $request->validate(['is_active' => 'required|boolean']);
 
         $user->is_active = $request->is_active;
         $user->save();
 
         $message = $user->is_active ? 'diaktifkan' : 'dinonaktifkan';
 
-        return response()->json(['success' => true, 'message' => "Pengguna {$user->name} berhasil {$message}."]);
+        return response()->json(array_merge(
+            ['success' => true, 'message' => "Pengguna {$user->name} berhasil {$message}."],
+            $this->getUserStats()
+        ));
+    }
+
+    // PENAMBAHAN BARU: Metode untuk menghapus pengguna
+    public function destroy(User $user)
+    {
+        if ($user->id === Auth::id()) {
+            return response()->json(['message' => 'Aksi tidak diizinkan. Anda tidak dapat menghapus akun Anda sendiri.'], 403);
+        }
+
+        $userName = $user->name;
+        $user->delete();
+
+        return response()->json(array_merge(
+            ['success' => true, 'message' => "Pengguna {$userName} berhasil dihapus."],
+            $this->getUserStats()
+        ));
+    }
+    
+    // PENAMBAHAN BARU: Helper method untuk mengambil statistik
+    private function getUserStats()
+    {
+        return [
+            'totalUsers' => User::count(),
+            'activeUsers' => User::where('is_active', true)->count(),
+            'inactiveUsers' => User::where('is_active', false)->count(),
+        ];
     }
 }

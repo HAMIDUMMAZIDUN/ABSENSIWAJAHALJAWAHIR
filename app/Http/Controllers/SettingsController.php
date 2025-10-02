@@ -17,6 +17,7 @@ class SettingsController extends Controller
     public function index()
     {
         $user = Auth::user();
+        // Diperbarui: Mengarahkan ke view 'app.settings' yang benar
         return view('settings.index', compact('user'));
     }
 
@@ -25,7 +26,8 @@ class SettingsController extends Controller
      */
     public function showUsernameForm()
     {
-        return view('settings.username');
+        // Diperbarui: Mengarahkan ke view 'app.settings.username'
+        return view('settings.index');
     }
 
     /**
@@ -39,7 +41,8 @@ class SettingsController extends Controller
         ]);
         $user->name = $request->username;
         $user->save();
-        return redirect()->route('settings.index')->with('success', 'Username berhasil diperbarui!');
+        // Diperbarui: Redirect ke route 'app.settings.index'
+        return redirect()->route('app.settings.index')->with('success', 'Username berhasil diperbarui!');
     }
 
     /**
@@ -47,7 +50,8 @@ class SettingsController extends Controller
      */
     public function showPasswordForm()
     {
-        return view('settings.password');
+        // Diperbarui: Mengarahkan ke view 'app.settings.password'
+        return view('settings.index');
     }
 
     /**
@@ -66,7 +70,8 @@ class SettingsController extends Controller
         ]);
         $user->password = Hash::make($request->password);
         $user->save();
-        return redirect()->route('settings.index')->with('success', 'Kata sandi berhasil diperbarui!');
+        // Diperbarui: Redirect ke route 'app.settings.index'
+        return redirect()->route('app.settings.index')->with('success', 'Kata sandi berhasil diperbarui!');
     }
     
     /**
@@ -74,7 +79,8 @@ class SettingsController extends Controller
      */
     public function showPhoneForm()
     {
-        return view('settings.phone', [
+        // Diperbarui: Mengarahkan ke view 'app.settings.phone'
+        return view('settings.index', [
             'user' => Auth::user()
         ]);
     }

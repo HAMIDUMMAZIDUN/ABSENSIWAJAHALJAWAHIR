@@ -1,47 +1,43 @@
 <!DOCTYPE html>
-<html lang="id" class="{{ auth()->user()?->theme ?? 'light' }}">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="csrf-token" content="{{ csrf_token() }}">
-
-    {{-- Menggunakan title yang dinamis dari @yield --}}
-    <title>@yield('title', 'Aplikasi Absensi')</title>
-
-    {{-- Menggunakan font Plus Jakarta Sans & ikon Feather --}}
-    <link rel="preconnect" href="https://fonts.bunny.net">
-    <link href="https://fonts.bunny.net/css?family=plus-jakarta-sans:400,600,700,800" rel="stylesheet" />
-    <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
-
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
-
-    {{-- Skrip untuk menghindari kedip dark mode --}}
-    <script>
-        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="csrf-token" content="{{ csrf_token() }}">
+        <title>{{ config('app.name', 'Laravel') }}</title>
+        <link rel="preconnect" href="https://fonts.bunny.net">
+        <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
+        {{-- PENAMBAHAN BARU: Skrip untuk menangani tema dinamis --}}
+        <script>
+            if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
             document.documentElement.classList.add('dark');
-        } else {
+            } else {
             document.documentElement.classList.remove('dark');
-        }
-    </script>
-</head>
-<body class="font-sans antialiased">
-    <div class="min-h-screen bg-gray-100 dark:bg-gray-900">
-        
-        {{-- Menggunakan header parsial kustom Anda --}}
-        @include('layouts.partials.header')
+            }
+        </script>
+        @vite(['resources/css/app.css', 'resources/js/app.js'])
+    </head>
+    <body class="font-sans antialiased">
+        {{-- Mengembalikan kelas dark mode agar tema dapat berganti --}}
+        <div class="min-h-screen bg-gray-100 dark:bg-gray-900">
+            @isset($header)
+                {{-- Mengembalikan kelas dark mode agar tema dapat berganti --}}
+                <header class="bg-white dark:bg-gray-800 shadow">
+                    <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+                        {{ $header }}
+                    </div>
+                </header>
+            @endisset
+            <main>
+                {{ $slot }}
+            </main>
+        </div>
 
-        {{-- Menggunakan struktur konten utama kustom Anda --}}
-        <main>
-            <div class="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
-                @yield('content')
-            </div>
-        </main>
-    </div>
-
-    {{-- Menambahkan skrip untuk Feather Icons dan script per halaman --}}
-    <script>
+        {{-- Skrip untuk Feather Icons --}}
+        <script src="https://unpkg.com/feather-icons"></script>
+        <script>
         feather.replace();
-    </script>
-    @stack('scripts')
-</body>
+        </script>
+    </body>
 </html>
+

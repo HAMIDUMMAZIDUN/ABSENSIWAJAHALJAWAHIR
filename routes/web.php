@@ -8,31 +8,35 @@ use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\FaceScanController;
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Middleware\IsAdminMiddleware;
-use Illuminate\Support\Facades\Auth; 
+use Illuminate\Support\Facades\Auth;
 
 Route::get('/', function () {
     return view('welcome');
 });
+
 Route::get('/dashboard', function () {
     $user = Auth::user();
-    if ($user && $user->is_admin) { 
+    if ($user && $user->is_admin) {
         return redirect()->route('admin.dashboard');
     }
     return redirect()->route('app.dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
+
 Route::middleware(['auth', IsAdminMiddleware::class])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', [AdminController::class, 'index'])->name('dashboard');
     Route::post('/users/{user}/toggle-status', [AdminController::class, 'toggleUserStatus'])->name('users.toggle-status');
+
+    // --- PENAMBAHAN BARU ---
+    // Route ini menangani permintaan untuk menghapus pengguna.
+    Route::delete('/users/{user}', [AdminController::class, 'destroy'])->name('users.destroy');
+    // ----------------------
 });
+
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/app/dashboard', [DashboardController::class, 'index'])->name('app.dashboard');
     Route::get('/app/riwayat', [HistoryController::class, 'index'])->name('app.history');
-    
-    // Rute untuk menampilkan halaman scan
     Route::get('/app/scan', [FaceScanController::class, 'index'])->name('app.scan');
-    // RUTE BARU: Untuk menerima data gambar dari proses scan
     Route::post('/app/scan/capture', [FaceScanController::class, 'capture'])->name('app.scan.capture');
-
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');

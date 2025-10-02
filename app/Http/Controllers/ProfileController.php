@@ -16,7 +16,7 @@ class ProfileController extends Controller
      */
     public function edit(Request $request): View
     {
-        // Arahkan ke view baru yang kita buat
+        // Mengubah view agar memuat halaman profil kustom Anda
         return view('profile.index', [
             'user' => $request->user(),
         ]);
@@ -24,6 +24,7 @@ class ProfileController extends Controller
 
     /**
      * Update the user's profile information.
+     * Catatan: Fungsionalitas ini mungkin ditangani oleh SettingsController Anda.
      */
     public function update(ProfileUpdateRequest $request): RedirectResponse
     {
@@ -40,6 +41,7 @@ class ProfileController extends Controller
 
     /**
      * Delete the user's account.
+     * Catatan: Halaman profil Anda saat ini tidak memiliki fitur ini.
      */
     public function destroy(Request $request): RedirectResponse
     {

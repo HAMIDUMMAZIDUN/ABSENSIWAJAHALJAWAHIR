@@ -4,7 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>@yield('title', 'Admin Panel') - {{ config('app.name', 'Laravel') }}</title>
+    
+    {{-- Kita akan menggunakan variabel $title dari slot bernama --}}
+    <title>{{ $title ?? 'Admin Panel' }} - {{ config('app.name', 'Laravel') }}</title>
     
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=plus-jakarta-sans:400,600,700,800" rel="stylesheet" />
@@ -22,6 +24,7 @@
 </head>
 <body class="font-sans bg-gray-100 dark:bg-gray-900">
     <div class="flex h-screen">
+        {{-- SIDEBAR --}}
         <aside class="w-64 flex-shrink-0 bg-white dark:bg-gray-800 shadow-lg">
             <div class="p-4 text-2xl font-bold text-teal-600 dark:text-teal-400 border-b dark:border-gray-700 text-center">
                 Admin Panel
@@ -33,6 +36,7 @@
                     <i data-feather="grid" class="w-5 h-5"></i>
                     <span class="ml-3">Dashboard</span>
                 </a>
+                {{-- Tambahkan link navigasi admin lainnya di sini --}}
             </nav>
 
             <div class="absolute bottom-0 w-64 p-2">
@@ -46,15 +50,18 @@
             </div>
         </aside>
 
+        {{-- MAIN CONTENT AREA --}}
         <div class="flex-1 flex flex-col overflow-hidden">
             <header class="flex justify-between items-center p-4 bg-white dark:bg-gray-800 border-b dark:border-gray-700">
-                 <h1 class="text-xl font-bold text-gray-800 dark:text-gray-200">@yield('title')</h1>
-                 <div class="text-gray-600 dark:text-gray-300">
-                    Selamat datang, {{ Auth::user()->name }}!
-                 </div>
+                {{-- Judul di header juga menggunakan variabel $title --}}
+               <h1 class="text-xl font-bold text-gray-800 dark:text-gray-200">{{ $title ?? 'Dashboard' }}</h1>
+               <div class="text-gray-600 dark:text-gray-300">
+                   Selamat datang, {{ Auth::user()->name }}!
+               </div>
             </header>
             <main class="flex-1 overflow-y-auto p-6">
-                @yield('content')
+                {{-- @yield('content') diganti dengan {{ $slot }} --}}
+                {{ $slot }}
             </main>
         </div>
     </div>
@@ -62,6 +69,7 @@
     <script>
         feather.replace();
     </script>
+    {{-- @stack tetap sama, untuk script dari halaman konten --}}
     @stack('scripts')
 </body>
 </html>

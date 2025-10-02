@@ -15,12 +15,6 @@ export default {
                 sans: ['Figtree', ...defaultTheme.fontFamily.sans],
             },
         },
-         darkMode: 'class', // Tambahkan atau pastikan baris ini ada
-    content: [
-        './vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php',
-        './storage/framework/views/*.php',
-        './resources/views/**/*.blade.php',
-    ],
     },
 
     plugins: [forms],

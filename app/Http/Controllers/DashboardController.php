@@ -37,7 +37,7 @@ class DashboardController extends Controller
             ['day' => 'Rabu', 'date' => '23 April, 05:00 PM', 'year' => '2025', 'photo' => $user->photo ?? '/images/default-avatar.png'],
         ];
 
-        // 5. Kirim semua data ke view
+        // 5. Kirim semua data ke view yang benar ('app.dashboard')
         return view('dashboard.index', [
             'user' => $user,
             'today' => $today,
