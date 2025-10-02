@@ -6,7 +6,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\HistoryController;
 use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\FaceScanController;
-use App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\Admin\DashboardAdminController; // Pastikan menggunakan nama Controller yang benar
 use App\Http\Middleware\IsAdminMiddleware;
 use Illuminate\Support\Facades\Auth;
 
@@ -33,9 +33,13 @@ Route::get('/dashboard', function () {
 
 // Routes untuk Admin (Dilindungi oleh IsAdminMiddleware)
 Route::middleware(['auth', IsAdminMiddleware::class])->prefix('admin')->name('admin.')->group(function () {
-    Route::get('/dashboard', [AdminController::class, 'index'])->name('dashboard'); // admin.dashboard
-    Route::post('/users/{user}/toggle-status', [AdminController::class, 'toggleUserStatus'])->name('users.toggle-status');
-    Route::delete('/users/{user}', [AdminController::class, 'destroy'])->name('users.destroy');
+    Route::get('/dashboard', [DashboardAdminController::class, 'index'])->name('dashboard'); // admin.dashboard
+    Route::post('/users/{user}/toggle-status', [DashboardAdminController::class, 'toggleUserStatus'])->name('users.toggle-status');
+    Route::delete('/users/{user}', [DashboardAdminController::class, 'destroy'])->name('users.destroy');
+
+    // --- PENAMBAHAN BARU: ROUTES UNTUK EDIT DAN UPDATE PENGGUNA ---
+    Route::get('/users/{user}/edit', [DashboardAdminController::class, 'edit'])->name('users.edit');
+    Route::patch('/users/{user}', [DashboardAdminController::class, 'update'])->name('users.update');
 });
 
 // Routes untuk User Biasa/Aplikasi (Dilindungi oleh middleware 'auth' dan 'verified')
