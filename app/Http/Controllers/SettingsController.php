@@ -17,7 +17,6 @@ class SettingsController extends Controller
     public function index()
     {
         $user = Auth::user();
-        // Diperbarui: Mengarahkan ke view 'app.settings' yang benar
         return view('settings.index', compact('user'));
     }
 
@@ -26,8 +25,8 @@ class SettingsController extends Controller
      */
     public function showUsernameForm()
     {
-        // Diperbarui: Mengarahkan ke view 'app.settings.username'
-        return view('settings.index');
+        $user = Auth::user();
+        return view('settings.index', compact('user'));
     }
 
     /**
@@ -41,7 +40,6 @@ class SettingsController extends Controller
         ]);
         $user->name = $request->username;
         $user->save();
-        // Diperbarui: Redirect ke route 'app.settings.index'
         return redirect()->route('app.settings.index')->with('success', 'Username berhasil diperbarui!');
     }
 
@@ -50,8 +48,8 @@ class SettingsController extends Controller
      */
     public function showPasswordForm()
     {
-        // Diperbarui: Mengarahkan ke view 'app.settings.password'
-        return view('settings.index');
+        $user = Auth::user();
+        return view('settings.index', compact('user'));
     }
 
     /**
@@ -70,7 +68,6 @@ class SettingsController extends Controller
         ]);
         $user->password = Hash::make($request->password);
         $user->save();
-        // Diperbarui: Redirect ke route 'app.settings.index'
         return redirect()->route('app.settings.index')->with('success', 'Kata sandi berhasil diperbarui!');
     }
     
@@ -79,8 +76,8 @@ class SettingsController extends Controller
      */
     public function showPhoneForm()
     {
-        // Diperbarui: Mengarahkan ke view 'app.settings.phone'
-        return view('settings.index', [
+        // DIPERBAIKI: Mengarahkan ke view 'settings.phone' yang spesifik
+        return view('settings.phone', [
             'user' => Auth::user()
         ]);
     }
@@ -92,22 +89,20 @@ class SettingsController extends Controller
     {
         $user = Auth::user();
 
-        // Validasi input nomor handphone
         $request->validate([
             'phone' => [
                 'required',
-                'numeric',      // Pastikan hanya angka
-                'min:10',       // Minimal 10 digit
-                Rule::unique('users')->ignore($user->id), // Unik, kecuali untuk user itu sendiri
+                'numeric',
+                'min:10', // Sebaiknya 'digits_between:10,15' untuk validasi yang lebih ketat
+                Rule::unique('users')->ignore($user->id),
             ],
         ]);
 
-        // Simpan perubahan ke database
         $user->phone = $request->phone;
         $user->save();
 
-        // Arahkan kembali ke halaman profil dengan pesan sukses
-        return redirect()->route('profile.edit')->with('status', 'Nomor handphone berhasil diperbarui.');
+        // DIPERBAIKI: Arahkan kembali ke halaman pengaturan utama dengan pesan sukses
+        return redirect()->route('app.settings.index')->with('success', 'Nomor handphone berhasil diperbarui.');
     }
 
     /**

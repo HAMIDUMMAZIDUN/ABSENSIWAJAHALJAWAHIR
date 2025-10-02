@@ -28,8 +28,7 @@
 
         <header class="absolute top-0 left-0 right-0 z-20 animate-fadeIn">
         <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
-                <a href="/" class="block">
-                    <img src="{{ asset('images/logo-pesantren.png') }}" alt="Logo Pesantren" class="h-10 w-auto">
+                <a href="/" class="block">                  
                 </a>
 
                 <div class="flex items-center gap-4">

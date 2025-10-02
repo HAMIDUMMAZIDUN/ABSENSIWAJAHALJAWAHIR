@@ -7,6 +7,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Storage; // <-- Tambahkan ini
 use Illuminate\View\View;
 
 class ProfileController extends Controller
@@ -16,15 +17,42 @@ class ProfileController extends Controller
      */
     public function edit(Request $request): View
     {
-        // Mengubah view agar memuat halaman profil kustom Anda
         return view('profile.index', [
             'user' => $request->user(),
         ]);
     }
 
     /**
+     * Update the user's profile photo.
+     */
+    public function updatePhoto(Request $request): RedirectResponse
+    {
+        // 1. Validasi file yang diupload
+        $request->validate([
+            'photo' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048', // Wajib, gambar, tipe file, maks 2MB
+        ]);
+
+        $user = Auth::user();
+
+        // 2. Hapus foto lama jika ada
+        if ($user->photo) {
+            Storage::delete('public/' . $user->photo);
+        }
+
+        // 3. Simpan foto baru dan dapatkan path-nya
+        $path = $request->file('photo')->store('photos', 'public');
+
+        // 4. Update kolom 'photo' di database
+        $user->photo = $path;
+        $user->save();
+
+        // 5. Kembali ke halaman profil dengan pesan sukses
+        return Redirect::route('profile.edit')->with('status', 'Foto profil berhasil diperbarui.');
+    }
+
+
+    /**
      * Update the user's profile information.
-     * Catatan: Fungsionalitas ini mungkin ditangani oleh SettingsController Anda.
      */
     public function update(ProfileUpdateRequest $request): RedirectResponse
     {
@@ -41,7 +69,6 @@ class ProfileController extends Controller
 
     /**
      * Delete the user's account.
-     * Catatan: Halaman profil Anda saat ini tidak memiliki fitur ini.
      */
     public function destroy(Request $request): RedirectResponse
     {

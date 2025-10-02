@@ -17,10 +17,12 @@
             </div>
         @endif
 
-        {{-- Kartu Pengaturan Akun --}}
+    {{-- Kartu Pengaturan Akun --}}
         <section class="mb-8">
             <h2 class="text-lg font-bold text-gray-800 dark:text-gray-200 mb-4">Akun</h2>
             <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-700">
+                
+                {{-- Ganti Username --}}
                 <a href="{{ route('app.settings.username') }}" class="flex justify-between items-center p-4 group border-b border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
                     <div class="flex items-center space-x-4">
                         <i data-feather="user" class="w-5 h-5 text-gray-500 dark:text-gray-400"></i>
@@ -28,12 +30,29 @@
                     </div>
                     <i data-feather="chevron-right" class="w-5 h-5 text-gray-400 group-hover:text-gray-600 dark:group-hover:text-gray-300"></i>
                 </a>
-                <a href="{{ route('app.settings.password') }}" class="flex justify-between items-center p-4 group hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
+                
+                {{-- Ganti Kata Sandi --}}
+                <a href="{{ route('app.settings.password') }}" class="flex justify-between items-center p-4 group border-b border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
                     <div class="flex items-center space-x-4">
                         <i data-feather="lock" class="w-5 h-5 text-gray-500 dark:text-gray-400"></i>
                         <span class="font-semibold text-gray-800 dark:text-gray-200">Ganti Kata Sandi</span>
                     </div>
                     <i data-feather="chevron-right" class="w-5 h-5 text-gray-400 group-hover:text-gray-600 dark:group-hover:text-gray-300"></i>
+                </a>
+
+                {{-- Ganti No Handphone --}}
+                <a href="{{ route('app.settings.phone') }}" class="flex justify-between items-center p-4 group hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
+                    <div class="flex items-center space-x-4">
+                        <i data-feather="phone" class="w-5 h-5 text-gray-500 dark:text-gray-400"></i>
+                        {{-- PERUBAHAN DI BARIS BERIKUT --}}
+                        <span class="font-semibold text-gray-800 dark:text-gray-200">Ganti No Handphone</span>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <span class="text-sm text-gray-500 dark:text-gray-400">
+                            {{ $user->phone ?? 'Belum diatur' }}
+                        </span>
+                        <i data-feather="chevron-right" class="w-5 h-5 text-gray-400 group-hover:text-gray-600 dark:group-hover:text-gray-300"></i>
+                    </div>
                 </a>
             </div>
         </section>

@@ -14,12 +14,12 @@
 
         <div>
             <label for="email" class="block font-medium text-sm text-gray-700 mb-1">Alamat Email</label>
-            <x-text-input id="email" class="block mt-1 w-full px-5 py-3 border-gray-300 rounded-full shadow-sm focus:border-teal-500 focus:ring focus:ring-teal-200 focus:ring-opacity-50"
-                          type="email"
-                          name="email"
-                          :value="old('email')"
-                          placeholder="Ketik Alamat Email Anda"
-                          required autofocus />
+            <x-text-input id="email" class="block mt-1 w-full px-5 py-3 border-gray-300 rounded-full shadow-sm focus:border-teal-500 focus:ring focus:ring-teal-200 focus:ring-opacity-50 bg-white dark:bg-white text-black dark:text-black"
+                                type="email"
+                                name="email"
+                                :value="old('email')"
+                                placeholder="Ketik Alamat Email Anda"
+                                required autofocus />
             <x-input-error :messages="$errors->get('email')" class="mt-2" />
         </div>
 

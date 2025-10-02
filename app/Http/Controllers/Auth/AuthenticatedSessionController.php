@@ -27,8 +27,21 @@ class AuthenticatedSessionController extends Controller
         $request->authenticate();
 
         $request->session()->regenerate();
+        
+        // --- LOGIKA PENGECEKAN ROLE YANG DIPERBAIKI (Menggunakan kolom 'role') ---
+        
+        $user = Auth::user();
 
-        return redirect()->intended(route('dashboard', absolute: false));
+        // Cek jika kolom 'role' memiliki nilai 'admin'
+        if ($user && $user->role === 'admin') {
+            // Jika user adalah admin, arahkan ke dashboard admin
+            return redirect()->intended(route('admin.dashboard', absolute: false));
+        }
+
+        // Jika user bukan admin (role = 'user'), arahkan ke dashboard user/app
+        return redirect()->intended(route('app.dashboard', absolute: false));
+        
+        // --- AKHIR LOGIKA PENGECEKAN ROLE YANG DIPERBAIKI ---
     }
 
     /**
