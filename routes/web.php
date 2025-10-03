@@ -13,9 +13,9 @@ use App\Http\Controllers\FaceScanController;
 
 // Admin Controllers
 use App\Http\Controllers\Admin\DashboardAdminController;
-use App\Http\Controllers\Admin\AttendanceController; // PENAMBAHAN BARU
-use App\Http\Controllers\Admin\FaceController;       // PENAMBAHAN BARU
-use App\Http\Controllers\Admin\AnnouncementController; // PENAMBAHAN BARU
+use App\Http\Controllers\Admin\AttendanceController;
+use App\Http\Controllers\Admin\FaceController;
+use App\Http\Controllers\Admin\AnnouncementController;
 
 
 Route::get('/', function () {
@@ -45,11 +45,11 @@ Route::middleware(['auth', IsAdminMiddleware::class])->prefix('admin')->name('ad
     Route::get('/users/{user}/edit', [DashboardAdminController::class, 'edit'])->name('users.edit');
     Route::patch('/users/{user}', [DashboardAdminController::class, 'update'])->name('users.update');
 
-    // --- PENAMBAHAN BARU: ROUTES UNTUK FITUR BARU ---
+    // --- ROUTES UNTUK FITUR BARU ---
     Route::get('/attendance', [AttendanceController::class, 'index'])->name('attendance.index');
     Route::get('/faces', [FaceController::class, 'index'])->name('faces.index');
     Route::get('/announcements', [AnnouncementController::class, 'index'])->name('announcements.index');
-    // --- AKHIR PENAMBAHAN BARU ---
+    // --- AKHIR PENAMBAHAN ---
 });
 
 // Routes untuk User Biasa/Aplikasi (Dilindungi oleh middleware 'auth' dan 'verified')
@@ -76,9 +76,16 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::post('/password', [SettingsController::class, 'updatePassword'])->name('password.update');
         Route::get('/phone', [SettingsController::class, 'showPhoneForm'])->name('phone');
         Route::post('/phone', [SettingsController::class, 'updatePhone'])->name('phone.update');
+        
+        // --- ROUTE UNTUK WAJAH ---
+        Route::get('/face', [SettingsController::class, 'showFaceForm'])->name('face.create');
+        Route::post('/face', [SettingsController::class, 'storeFace'])->name('face.store');
+        // --- AKHIR ROUTE ---
+
         Route::post('/notifications', [SettingsController::class, 'updateNotifications'])->name('notifications.update');
         Route::post('/theme', [SettingsController::class, 'updateTheme'])->name('theme.update');
     });
 });
 
 require __DIR__.'/auth.php';
+

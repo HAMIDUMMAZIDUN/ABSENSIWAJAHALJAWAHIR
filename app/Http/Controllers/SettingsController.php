@@ -3,11 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\Face;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\Password;
+use Illuminate\Support\Facades\Storage;
 
 class SettingsController extends Controller
 {
@@ -76,7 +78,6 @@ class SettingsController extends Controller
      */
     public function showPhoneForm()
     {
-        // DIPERBAIKI: Mengarahkan ke view 'settings.phone' yang spesifik
         return view('settings.phone', [
             'user' => Auth::user()
         ]);
@@ -93,7 +94,7 @@ class SettingsController extends Controller
             'phone' => [
                 'required',
                 'numeric',
-                'min:10', // Sebaiknya 'digits_between:10,15' untuk validasi yang lebih ketat
+                'min:10',
                 Rule::unique('users')->ignore($user->id),
             ],
         ]);
@@ -101,8 +102,47 @@ class SettingsController extends Controller
         $user->phone = $request->phone;
         $user->save();
 
-        // DIPERBAIKI: Arahkan kembali ke halaman pengaturan utama dengan pesan sukses
         return redirect()->route('app.settings.index')->with('success', 'Nomor handphone berhasil diperbarui.');
+    }
+
+    /**
+     * Menampilkan halaman form pendaftaran wajah.
+     */
+    public function showFaceForm()
+    {
+        return view('settings.face-create', [
+            'user' => Auth::user()
+        ]);
+    }
+
+    /**
+     * Menyimpan data gambar wajah yang diambil.
+     */
+    public function storeFace(Request $request)
+    {
+        $request->validate([
+            'image' => 'required',
+        ]);
+
+        $user = Auth::user();
+        $imageData = $request->image;
+        
+        list($type, $imageData) = explode(';', $imageData);
+        list(, $imageData)      = explode(',', $imageData);
+        
+        $decodedImage = base64_decode($imageData);
+        
+        $fileName = 'face_' . $user->id . '_' . uniqid() . '.png';
+        $path = 'face_images/' . $fileName;
+
+        Storage::disk('public')->put($path, $decodedImage);
+
+        Face::updateOrCreate(
+            ['user_id' => $user->id],
+            ['face_image_path' => $path, 'is_verified' => true]
+        );
+
+        return redirect()->route('app.settings.index')->with('success', 'Wajah Anda berhasil didaftarkan!');
     }
 
     /**
@@ -141,3 +181,4 @@ class SettingsController extends Controller
         return response()->json(['message' => 'Tema berhasil diperbarui.']);
     }
 }
+

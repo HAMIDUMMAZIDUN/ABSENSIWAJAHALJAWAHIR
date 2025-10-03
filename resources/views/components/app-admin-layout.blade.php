@@ -31,8 +31,8 @@
             <nav class="mt-4">
                 {{-- Link Dashboard (Sudah ada) --}}
                 <a href="{{ route('admin.dashboard') }}" 
-                class="flex items-center px-6 py-3 mx-2 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700
-                        {{ request()->routeIs('admin.dashboard*') ? 'bg-gray-200 dark:bg-gray-700 font-bold' : '' }}">
+                   class="flex items-center px-6 py-3 mx-2 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700
+                          {{ request()->routeIs('admin.dashboard*') ? 'bg-gray-200 dark:bg-gray-700 font-bold' : '' }}">
                     <i data-feather="grid" class="w-5 h-5"></i>
                     <span class="ml-3">Dashboard</span>
                 </a>
@@ -42,22 +42,22 @@
                 {{-- ====================================================== --}}
 
                 <a href="{{ route('admin.attendance.index') }}"
-                class="flex items-center px-6 py-3 mx-2 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700
-                        {{ request()->routeIs('admin.attendance.*') ? 'bg-gray-200 dark:bg-gray-700 font-bold' : '' }}">
+                   class="flex items-center px-6 py-3 mx-2 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700
+                          {{ request()->routeIs('admin.attendance.*') ? 'bg-gray-200 dark:bg-gray-700 font-bold' : '' }}">
                     <i data-feather="clipboard" class="w-5 h-5"></i>
                     <span class="ml-3">Rekap Absensi</span>
                 </a>
 
-                <a href="#" {{-- Ganti # dengan route('admin.faces.index') --}}
-                class="flex items-center px-6 py-3 mx-2 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700
-                        {{ request()->routeIs('admin.faces.*') ? 'bg-gray-200 dark:bg-gray-700 font-bold' : '' }}">
+                <a href="{{ route('admin.faces.index') }}"
+                   class="flex items-center px-6 py-3 mx-2 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700
+                          {{ request()->routeIs('admin.faces.*') ? 'bg-gray-200 dark:bg-gray-700 font-bold' : '' }}">
                     <i data-feather="users" class="w-5 h-5"></i>
                     <span class="ml-3">Daftar Wajah</span>
                 </a>
 
-                <a href="#" {{-- Ganti # dengan route('admin.announcements.index') --}}
-                class="flex items-center px-6 py-3 mx-2 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700
-                        {{ request()->routeIs('admin.announcements.*') ? 'bg-gray-200 dark:bg-gray-700 font-bold' : '' }}">
+                <a href="{{ route('admin.announcements.index') }}"
+                   class="flex items-center px-6 py-3 mx-2 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700
+                          {{ request()->routeIs('admin.announcements.*') ? 'bg-gray-200 dark:bg-gray-700 font-bold' : '' }}">
                     <i data-feather="bell" class="w-5 h-5"></i>
                     <span class="ml-3">Pengumuman</span>
                 </a>

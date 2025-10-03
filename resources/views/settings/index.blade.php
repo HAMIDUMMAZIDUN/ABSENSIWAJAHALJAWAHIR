@@ -1,7 +1,5 @@
 <x-app-layout>
-    {{-- Merombak total tema visual halaman pengaturan agar lebih modern dan estetik --}}
     <main class="p-6 pb-24 bg-slate-50 dark:bg-slate-900 min-h-screen">
-        {{-- Header Halaman --}}
         <header class="flex items-center space-x-4 mb-8">
             <a href="{{ url()->previous() }}" class="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">
                 <i data-feather="arrow-left" class="w-6 h-6 text-gray-800 dark:text-gray-200"></i>
@@ -9,7 +7,6 @@
             <h1 class="text-xl font-bold text-gray-800 dark:text-gray-200">Pengaturan</h1>
         </header>
 
-        {{-- Notifikasi Sukses --}}
         @if (session('success'))
             <div class="bg-teal-100 border-l-4 border-teal-500 text-teal-700 p-4 rounded-lg mb-8" role="alert">
                 <p class="font-bold">Sukses</p>
@@ -17,12 +14,10 @@
             </div>
         @endif
 
-    {{-- Kartu Pengaturan Akun --}}
         <section class="mb-8">
             <h2 class="text-lg font-bold text-gray-800 dark:text-gray-200 mb-4">Akun</h2>
             <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-700">
                 
-                {{-- Ganti Username --}}
                 <a href="{{ route('app.settings.username') }}" class="flex justify-between items-center p-4 group border-b border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
                     <div class="flex items-center space-x-4">
                         <i data-feather="user" class="w-5 h-5 text-gray-500 dark:text-gray-400"></i>
@@ -31,7 +26,6 @@
                     <i data-feather="chevron-right" class="w-5 h-5 text-gray-400 group-hover:text-gray-600 dark:group-hover:text-gray-300"></i>
                 </a>
                 
-                {{-- Ganti Kata Sandi --}}
                 <a href="{{ route('app.settings.password') }}" class="flex justify-between items-center p-4 group border-b border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
                     <div class="flex items-center space-x-4">
                         <i data-feather="lock" class="w-5 h-5 text-gray-500 dark:text-gray-400"></i>
@@ -40,11 +34,9 @@
                     <i data-feather="chevron-right" class="w-5 h-5 text-gray-400 group-hover:text-gray-600 dark:group-hover:text-gray-300"></i>
                 </a>
 
-                {{-- Ganti No Handphone --}}
                 <a href="{{ route('app.settings.phone') }}" class="flex justify-between items-center p-4 group hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
                     <div class="flex items-center space-x-4">
                         <i data-feather="phone" class="w-5 h-5 text-gray-500 dark:text-gray-400"></i>
-                        {{-- PERUBAHAN DI BARIS BERIKUT --}}
                         <span class="font-semibold text-gray-800 dark:text-gray-200">Ganti No Handphone</span>
                     </div>
                     <div class="flex items-center space-x-2">
@@ -54,10 +46,28 @@
                         <i data-feather="chevron-right" class="w-5 h-5 text-gray-400 group-hover:text-gray-600 dark:group-hover:text-gray-300"></i>
                     </div>
                 </a>
+                
+                <a href="{{ route('app.settings.face.create') }}" class="flex justify-between items-center p-4 group border-t border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
+                    <div class="flex items-center space-x-4">
+                        <i data-feather="camera" class="w-5 h-5 text-gray-500 dark:text-gray-400"></i>
+                        <span class="font-semibold text-gray-800 dark:text-gray-200">Daftar Wajah</span>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        @if (Auth::user()->face)
+                            <span class="px-2 py-1 text-xs font-semibold leading-tight text-green-700 bg-green-100 rounded-full dark:bg-green-700 dark:text-green-100">
+                                Sudah Terdaftar
+                            </span>
+                        @else
+                            <span class="px-2 py-1 text-xs font-semibold leading-tight text-yellow-700 bg-yellow-100 rounded-full dark:bg-yellow-700 dark:text-yellow-100">
+                                Belum Terdaftar
+                            </span>
+                        @endif
+                        <i data-feather="chevron-right" class="w-5 h-5 text-gray-400 group-hover:text-gray-600 dark:group-hover:text-gray-300"></i>
+                    </div>
+                </a>
             </div>
         </section>
 
-        {{-- PENAMBAHAN BARU: Kartu Pengaturan Tampilan --}}
         <section class="mb-8">
             <h2 class="text-lg font-bold text-gray-800 dark:text-gray-200 mb-4">Tampilan</h2>
             <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-700">
@@ -74,7 +84,6 @@
             </div>
         </section>
 
-        {{-- Kartu Pengaturan Notifikasi --}}
         <section class="mb-8">
             <h2 class="text-lg font-bold text-gray-800 dark:text-gray-200 mb-4">Notifikasi</h2>
             <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-700">
@@ -101,7 +110,6 @@
             </div>
         </section>
 
-        {{-- Tombol Keluar --}}
         <section>
             <form method="POST" action="{{ route('logout') }}">
                 @csrf
@@ -116,11 +124,9 @@
 
 @push('scripts')
 <script>
-    // Pastikan skrip hanya berjalan jika belum pernah dideklarasikan
     if (typeof window.csrfToken === 'undefined') {
         window.csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
-        // --- SKRIP UNTUK NOTIFIKASI ---
         document.querySelectorAll('.notification-toggle').forEach(toggle => {
             toggle.addEventListener('change', function() {
                 const type = this.dataset.type;
@@ -144,18 +150,15 @@
             });
         });
 
-        // --- SKRIP UNTUK TEMA ---
         const themeToggle = document.getElementById('theme-toggle');
 
         if (themeToggle) {
-            // Atur posisi toggle saat halaman dimuat, berdasarkan kondisi dari layout utama
             if (document.documentElement.classList.contains('dark')) {
                 themeToggle.checked = true;
             } else {
                 themeToggle.checked = false;
             }
 
-            // Tambahkan event listener saat toggle diklik
             themeToggle.addEventListener('change', function() {
                 const newTheme = this.checked ? 'dark' : 'light';
                 localStorage.theme = newTheme;
@@ -166,7 +169,6 @@
                     document.documentElement.classList.remove('dark');
                 }
 
-                // Kirim preferensi tema ke server (opsional, tapi bagus untuk konsistensi)
                 fetch("{{ route('app.settings.theme.update') }}", {
                     method: 'POST',
                     headers: {

@@ -74,7 +74,8 @@
                                     {{ $attendance->user->name }}
                                 </th>
                                 
-                                <td class="px-6 py-4">{{ $attendance->date->format('d F Y') }}</td>
+                                
+                                <td class="px-6 py-4">{{ $attendance->date->translatedFormat('l, d F Y') }}</td>
                                 <td class="px-6 py-4">{{ $attendance->check_in ? $attendance->check_in->format('H:i') : '-' }}</td>
                                 <td class="px-6 py-4">{{ $attendance->check_out ? $attendance->check_out->format('H:i') : '-' }}</td>
                                 <td class="px-6 py-4">
