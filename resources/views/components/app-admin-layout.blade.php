@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     
-    {{-- Kita akan menggunakan variabel $title dari slot bernama --}}
     <title>{{ $title ?? 'Admin Panel' }} - {{ config('app.name', 'Laravel') }}</title>
     
     <link rel="preconnect" href="https://fonts.bunny.net">
@@ -30,21 +29,50 @@
                 Admin Panel
             </div>
             <nav class="mt-4">
+                {{-- Link Dashboard (Sudah ada) --}}
                 <a href="{{ route('admin.dashboard') }}" 
-                   class="flex items-center px-6 py-3 mx-2 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700
-                          {{ request()->routeIs('admin.dashboard') ? 'bg-gray-200 dark:bg-gray-700 font-bold' : '' }}">
+                class="flex items-center px-6 py-3 mx-2 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700
+                        {{ request()->routeIs('admin.dashboard*') ? 'bg-gray-200 dark:bg-gray-700 font-bold' : '' }}">
                     <i data-feather="grid" class="w-5 h-5"></i>
                     <span class="ml-3">Dashboard</span>
                 </a>
-                {{-- Tambahkan link navigasi admin lainnya di sini --}}
+
+                {{-- ====================================================== --}}
+                {{-- PENAMBAHAN BARU: MENU REKAP, WAJAH, & PENGUMUMAN --}}
+                {{-- ====================================================== --}}
+
+                <a href="{{ route('admin.attendance.index') }}"
+                class="flex items-center px-6 py-3 mx-2 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700
+                        {{ request()->routeIs('admin.attendance.*') ? 'bg-gray-200 dark:bg-gray-700 font-bold' : '' }}">
+                    <i data-feather="clipboard" class="w-5 h-5"></i>
+                    <span class="ml-3">Rekap Absensi</span>
+                </a>
+
+                <a href="#" {{-- Ganti # dengan route('admin.faces.index') --}}
+                class="flex items-center px-6 py-3 mx-2 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700
+                        {{ request()->routeIs('admin.faces.*') ? 'bg-gray-200 dark:bg-gray-700 font-bold' : '' }}">
+                    <i data-feather="users" class="w-5 h-5"></i>
+                    <span class="ml-3">Daftar Wajah</span>
+                </a>
+
+                <a href="#" {{-- Ganti # dengan route('admin.announcements.index') --}}
+                class="flex items-center px-6 py-3 mx-2 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700
+                        {{ request()->routeIs('admin.announcements.*') ? 'bg-gray-200 dark:bg-gray-700 font-bold' : '' }}">
+                    <i data-feather="bell" class="w-5 h-5"></i>
+                    <span class="ml-3">Pengumuman</span>
+                </a>
+
+                {{-- ====================================================== --}}
+                {{-- AKHIR PENAMBAHAN BARU --}}
+                {{-- ====================================================== --}}
             </nav>
 
             <div class="absolute bottom-0 w-64 p-2">
-                 <form method="POST" action="{{ route('logout') }}" class="w-full">
+                <form method="POST" action="{{ route('logout') }}" class="w-full">
                     @csrf
                     <button type="submit" class="flex items-center w-full px-6 py-3 text-left rounded-lg text-gray-700 dark:text-gray-300 hover:bg-red-100 dark:hover:bg-red-800/50">
-                          <i data-feather="log-out" class="w-5 h-5"></i>
-                          <span class="ml-3">Keluar</span>
+                        <i data-feather="log-out" class="w-5 h-5"></i>
+                        <span class="ml-3">Keluar</span>
                     </button>
                 </form>
             </div>
@@ -53,14 +81,12 @@
         {{-- MAIN CONTENT AREA --}}
         <div class="flex-1 flex flex-col overflow-hidden">
             <header class="flex justify-between items-center p-4 bg-white dark:bg-gray-800 border-b dark:border-gray-700">
-                {{-- Judul di header juga menggunakan variabel $title --}}
-               <h1 class="text-xl font-bold text-gray-800 dark:text-gray-200">{{ $title ?? 'Dashboard' }}</h1>
-               <div class="text-gray-600 dark:text-gray-300">
-                   Selamat datang, {{ Auth::user()->name }}!
-               </div>
+            <h1 class="text-xl font-bold text-gray-800 dark:text-gray-200">{{ $title ?? 'Dashboard' }}</h1>
+            <div class="text-gray-600 dark:text-gray-300">
+                Selamat datang, {{ Auth::user()->name }}!
+            </div>
             </header>
             <main class="flex-1 overflow-y-auto p-6">
-                {{-- @yield('content') diganti dengan {{ $slot }} --}}
                 {{ $slot }}
             </main>
         </div>
@@ -69,7 +95,6 @@
     <script>
         feather.replace();
     </script>
-    {{-- @stack tetap sama, untuk script dari halaman konten --}}
     @stack('scripts')
 </body>
 </html>

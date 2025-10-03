@@ -1,50 +1,60 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
+use App\Http\Middleware\IsAdminMiddleware;
+
+// User Controllers
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\HistoryController;
 use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\FaceScanController;
-use App\Http\Controllers\Admin\DashboardAdminController; // Pastikan menggunakan nama Controller yang benar
-use App\Http\Middleware\IsAdminMiddleware;
-use Illuminate\Support\Facades\Auth;
+
+// Admin Controllers
+use App\Http\Controllers\Admin\DashboardAdminController;
+use App\Http\Controllers\Admin\AttendanceController; // PENAMBAHAN BARU
+use App\Http\Controllers\Admin\FaceController;       // PENAMBAHAN BARU
+use App\Http\Controllers\Admin\AnnouncementController; // PENAMBAHAN BARU
+
 
 Route::get('/', function () {
     return view('welcome');
 });
 
 // ===================================================================
-// LOGIKA PENGALIHAN ROLE PADA /dashboard (DIPERBAIKI)
+// LOGIKA PENGALIHAN ROLE PADA /dashboard
 // ===================================================================
 Route::get('/dashboard', function () {
     $user = Auth::user();
     
-    // Perbaikan: Cek kolom 'role' di database
-    // Jika role adalah 'admin', arahkan ke admin.dashboard
     if ($user && $user->role === 'admin') {
         return redirect()->route('admin.dashboard');
     }
     
-    // Jika role adalah 'user' atau lainnya, arahkan ke app.dashboard
     return redirect()->route('app.dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 // ===================================================================
 
 // Routes untuk Admin (Dilindungi oleh IsAdminMiddleware)
 Route::middleware(['auth', IsAdminMiddleware::class])->prefix('admin')->name('admin.')->group(function () {
-    Route::get('/dashboard', [DashboardAdminController::class, 'index'])->name('dashboard'); // admin.dashboard
+    // Rute Manajemen Pengguna (Sudah Ada)
+    Route::get('/dashboard', [DashboardAdminController::class, 'index'])->name('dashboard');
     Route::post('/users/{user}/toggle-status', [DashboardAdminController::class, 'toggleUserStatus'])->name('users.toggle-status');
     Route::delete('/users/{user}', [DashboardAdminController::class, 'destroy'])->name('users.destroy');
-
-    // --- PENAMBAHAN BARU: ROUTES UNTUK EDIT DAN UPDATE PENGGUNA ---
     Route::get('/users/{user}/edit', [DashboardAdminController::class, 'edit'])->name('users.edit');
     Route::patch('/users/{user}', [DashboardAdminController::class, 'update'])->name('users.update');
+
+    // --- PENAMBAHAN BARU: ROUTES UNTUK FITUR BARU ---
+    Route::get('/attendance', [AttendanceController::class, 'index'])->name('attendance.index');
+    Route::get('/faces', [FaceController::class, 'index'])->name('faces.index');
+    Route::get('/announcements', [AnnouncementController::class, 'index'])->name('announcements.index');
+    // --- AKHIR PENAMBAHAN BARU ---
 });
 
 // Routes untuk User Biasa/Aplikasi (Dilindungi oleh middleware 'auth' dan 'verified')
 Route::middleware(['auth', 'verified'])->group(function () {
-    Route::get('/app/dashboard', [DashboardController::class, 'index'])->name('app.dashboard'); // app.dashboard (DashboardController::index)
+    Route::get('/app/dashboard', [DashboardController::class, 'index'])->name('app.dashboard');
     Route::get('/app/riwayat', [HistoryController::class, 'index'])->name('app.history');
     Route::get('/app/scan', [FaceScanController::class, 'index'])->name('app.scan');
     Route::post('/app/scan/capture', [FaceScanController::class, 'capture'])->name('app.scan.capture');

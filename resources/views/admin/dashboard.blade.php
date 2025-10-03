@@ -1,204 +1,109 @@
 <x-app-admin-layout>
-    {{-- Ini akan mengisi variabel $title di layout --}}
+    {{-- Slot untuk judul halaman --}}
     <x-slot name="title">
-        Admin Dashboard
+        Dashboard Admin
     </x-slot>
 
-    {{-- Notifikasi Toast akan muncul di sini --}}
-    <div id="toast-container" class="fixed top-5 right-5 z-50 space-y-2"></div>
-
-    {{-- Notifikasi Sukses/Error dari Controller --}}
+    {{-- Notifikasi Sukses --}}
     @if (session('success'))
-        <div class="bg-teal-100 border border-teal-400 text-teal-700 px-4 py-3 rounded relative mb-6" role="alert">
-            {{ session('success') }}
-        </div>
-    @endif
-    @if (session('error'))
-        <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-6" role="alert">
-            {{ session('error') }}
+        <div class="p-4 mb-4 text-sm text-green-700 bg-green-100 rounded-lg dark:bg-green-200 dark:text-green-800" role="alert">
+            <span class="font-medium">Sukses!</span> {{ session('success') }}
         </div>
     @endif
 
-    {{-- Bagian Statistik --}}
-    <section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-        <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-md">
-            <h3 class="text-sm font-medium text-gray-500 dark:text-gray-400">Total Pengguna</h3>
-            <p id="total-users-stat" class="text-3xl font-bold text-gray-900 dark:text-white mt-2">{{ $totalUsers }}</p>
+    {{-- 1. KARTU STATISTIK --}}
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
+        <div class="bg-white dark:bg-gray-800 shadow-lg rounded-lg p-6 flex items-center">
+            <div class="bg-teal-500 bg-opacity-20 text-teal-600 dark:text-teal-300 rounded-full p-3">
+                <i data-feather="users" class="w-6 h-6"></i>
+            </div>
+            <div class="ml-4">
+                <p class="text-sm text-gray-500 dark:text-gray-400">Total Pengguna</p>
+                <p id="total-users" class="text-2xl font-bold text-gray-800 dark:text-gray-100">{{ $totalUsers }}</p>
+            </div>
         </div>
-        <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-md">
-            <h3 class="text-sm font-medium text-gray-500 dark:text-gray-400">Pengguna Aktif</h3>
-            <p id="active-users-stat" class="text-3xl font-bold text-green-600 dark:text-green-400 mt-2">{{ $activeUsers }}</p>
+        <div class="bg-white dark:bg-gray-800 shadow-lg rounded-lg p-6 flex items-center">
+            <div class="bg-green-500 bg-opacity-20 text-green-600 dark:text-green-300 rounded-full p-3">
+                <i data-feather="user-check" class="w-6 h-6"></i>
+            </div>
+            <div class="ml-4">
+                <p class="text-sm text-gray-500 dark:text-gray-400">Pengguna Aktif</p>
+                <p id="active-users" class="text-2xl font-bold text-gray-800 dark:text-gray-100">{{ $activeUsers }}</p>
+            </div>
         </div>
-        <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-md">
-            <h3 class="text-sm font-medium text-gray-500 dark:text-gray-400">Pengguna Nonaktif</h3>
-            <p id="inactive-users-stat" class="text-3xl font-bold text-red-600 dark:text-red-400 mt-2">{{ $inactiveUsers }}</p>
+        <div class="bg-white dark:bg-gray-800 shadow-lg rounded-lg p-6 flex items-center">
+            <div class="bg-red-500 bg-opacity-20 text-red-600 dark:text-red-300 rounded-full p-3">
+                <i data-feather="user-x" class="w-6 h-6"></i>
+            </div>
+            <div class="ml-4">
+                <p class="text-sm text-gray-500 dark:text-gray-400">Pengguna Nonaktif</p>
+                <p id="inactive-users" class="text-2xl font-bold text-gray-800 dark:text-gray-100">{{ $inactiveUsers }}</p>
+            </div>
         </div>
-    </section>
+    </div>
 
-    {{-- Bagian Manajemen Pengguna --}}
-    <section>
-        <h2 class="text-xl font-bold text-gray-800 dark:text-gray-200 mb-4">Manajemen Pengguna</h2>
-
-        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-x-auto">
-            <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+    {{-- 2. TABEL PENGGUNA --}}
+    <div class="bg-white dark:bg-gray-800 shadow-xl rounded-lg overflow-hidden">
+        <div class="p-6 border-b dark:border-gray-700">
+            <h2 class="text-xl font-semibold text-gray-800 dark:text-gray-100">Manajemen Pengguna</h2>
+        </div>
+        <div class="overflow-x-auto">
+            <table class="min-w-full text-sm text-left text-gray-500 dark:text-gray-400">
                 <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                     <tr>
-                        <th scope="col" class="px-6 py-3">Foto</th>
                         <th scope="col" class="px-6 py-3">Nama</th>
                         <th scope="col" class="px-6 py-3">Email</th>
-                        <th scope="col" class="px-6 py-3">Status Login</th>
-                        <th scope="col" class="px-6 py-3">Role</th> {{-- Tambahkan kolom Role --}}
-                        <th scope="col" class="px-6 py-3">Aksi</th>
+                        <th scope="col" class="px-6 py-3">Status</th>
+                        <th scope="col" class="px-6 py-3 text-center">Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
                     @forelse ($users as $user)
                     <tr id="user-row-{{ $user->id }}" class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-                        <td class="px-6 py-4">
-                            <img src="{{ $user->photo ? Storage::url($user->photo) : asset('images/default-avatar.png') }}" alt="Foto {{ $user->name }}" class="w-10 h-10 rounded-full object-cover">
-                        </td>
-                        <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                        <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                             {{ $user->name }}
-                        </td>
+                        </th>
                         <td class="px-6 py-4">{{ $user->email }}</td>
                         <td class="px-6 py-4">
-                            {{-- Toggle Status --}}
-                            <label class="inline-flex items-center cursor-pointer">
-                                <input type="checkbox"
-                                        data-url="{{ route('admin.users.toggle-status', $user) }}"
-                                        class="sr-only peer user-status-toggle"
-                                        @checked($user->is_active)>
-                                <div class="relative w-11 h-6 bg-gray-200 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:bg-gray-600 peer-checked:bg-teal-600"></div>
-                            </label>
+                            <span id="status-{{ $user->id }}" class="px-2 py-1 font-semibold leading-tight rounded-full {{ $user->is_active ? 'text-green-700 bg-green-100 dark:bg-green-700 dark:text-green-100' : 'text-red-700 bg-red-100 dark:bg-red-700 dark:text-red-100' }}">
+                                {{ $user->is_active ? 'Aktif' : 'Nonaktif' }}
+                            </span>
                         </td>
-                        {{-- Tampilkan Role --}}
-                        <td class="px-6 py-4 capitalize">
-                            {{ $user->role }}
-                        </td>
-                        {{-- Tombol Aksi (Edit & Hapus) --}}
-                        <td class="px-6 py-4 flex space-x-3">
-                            <a href="{{ route('admin.users.edit', $user) }}" 
-                               class="font-medium text-indigo-600 dark:text-indigo-500 hover:underline hover:text-indigo-700 dark:hover:text-indigo-300 transition-colors">
-                                Edit
-                            </a>
-                            <button type="button"
-                                    data-url="{{ route('admin.users.destroy', $user) }}"
-                                    data-user-name="{{ $user->name }}"
-                                    class="delete-user-button font-medium text-red-600 dark:text-red-500 hover:underline hover:text-red-700 dark:hover:text-red-300 transition-colors">
+                        <td class="px-6 py-4 text-center">
+                            {{-- Tombol Toggle Status --}}
+                            <button 
+                                class="toggle-status-btn font-medium {{ $user->is_active ? 'text-yellow-600 dark:text-yellow-500' : 'text-green-600 dark:text-green-500' }} hover:underline"
+                                data-user-id="{{ $user->id }}"
+                                data-current-status="{{ $user->is_active ? '1' : '0' }}"
+                                data-url="{{ route('admin.users.toggle-status', $user) }}">
+                                {{ $user->is_active ? 'Nonaktifkan' : 'Aktifkan' }}
+                            </button>
+                            {{-- Tombol Edit --}}
+                            <a href="{{ route('admin.users.edit', $user) }}" class="font-medium text-blue-600 dark:text-blue-500 hover:underline ml-4">Edit</a>
+                            {{-- Tombol Hapus --}}
+                            <button 
+                                class="delete-user-btn font-medium text-red-600 dark:text-red-500 hover:underline ml-4"
+                                data-user-id="{{ $user->id }}"
+                                data-user-name="{{ $user->name }}"
+                                data-url="{{ route('admin.users.destroy', $user) }}">
                                 Hapus
                             </button>
                         </td>
                     </tr>
                     @empty
                     <tr>
-                        <td colspan="6" class="px-6 py-4 text-center">Tidak ada pengguna untuk ditampilkan.</td>
+                        <td colspan="4" class="px-6 py-12 text-center text-gray-500 dark:text-gray-400">
+                            Tidak ada data pengguna.
+                        </td>
                     </tr>
                     @endforelse
                 </tbody>
             </table>
         </div>
-        <div class="mt-4">
+        {{-- Link Paginasi --}}
+        <div class="p-6">
             {{ $users->links() }}
         </div>
-    </section>
+    </div>
 
-    {{-- Script JavaScript untuk AJAX dan Notifikasi --}}
-    @push('scripts')
-    <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        // Ambil CSRF token, pastikan Anda punya meta tag: <meta name="csrf-token" content="{{ csrf_token() }}">
-        const csrfToken = document.querySelector('meta[name="csrf-token"]') ? document.querySelector('meta[name="csrf-token"]').getAttribute('content') : '';
-
-        function showToast(message, isSuccess = true) {
-            const container = document.getElementById('toast-container');
-            const toast = document.createElement('div');
-            const bgColor = isSuccess ? 'bg-teal-500' : 'bg-red-500';
-            toast.className = `max-w-xs ${bgColor} text-sm text-white rounded-lg shadow-xl p-4 transition-transform duration-300 transform translate-x-full`;
-            toast.textContent = message;
-            container.appendChild(toast);
-            
-            // Masuk
-            setTimeout(() => toast.classList.remove('translate-x-full'), 100);
-            
-            // Keluar
-            setTimeout(() => {
-                toast.classList.add('translate-x-full');
-                setTimeout(() => toast.remove(), 400);
-            }, 3000);
-        }
-
-        // --- Logika untuk Toggle Status ---
-        document.querySelectorAll('.user-status-toggle').forEach(toggle => {
-            toggle.addEventListener('change', async function (event) {
-                const url = this.dataset.url;
-                const newStatus = this.checked;
-
-                try {
-                    const response = await fetch(url, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'X-CSRF-TOKEN': csrfToken,
-                            'Accept': 'application/json'
-                        },
-                        body: JSON.stringify({ is_active: newStatus })
-                    });
-                    const result = await response.json();
-                    if (!response.ok) { throw new Error(result.message || 'Gagal memperbarui status.'); }
-                    showToast(result.message, true);
-
-                    // Update statistik tanpa reload
-                    document.getElementById('active-users-stat').textContent = result.activeUsers;
-                    document.getElementById('inactive-users-stat').textContent = result.inactiveUsers;
-
-                } catch (error) {
-                    console.error('Terjadi kesalahan:', error);
-                    showToast(error.message, false);
-                    event.target.checked = !newStatus; // Kembalikan toggle ke status semula
-                }
-            });
-        });
-
-        // --- Logika untuk Tombol Hapus ---
-        document.querySelectorAll('.delete-user-button').forEach(button => {
-            button.addEventListener('click', async function (event) {
-                event.preventDefault();
-
-                const url = this.dataset.url;
-                const userName = this.dataset.userName;
-                
-                // Peringatan: Menggunakan window.confirm (sebaiknya diganti modal kustom)
-                if (window.confirm(`Apakah Anda yakin ingin menghapus pengguna "${userName}"? Aksi ini tidak dapat dibatalkan.`)) {
-                    try {
-                        const response = await fetch(url, {
-                            method: 'DELETE', // Menggunakan method DELETE
-                            headers: {
-                                'X-CSRF-TOKEN': csrfToken,
-                                'Accept': 'application/json'
-                            }
-                        });
-
-                        const result = await response.json();
-                        if (!response.ok) { throw new Error(result.message || 'Gagal menghapus pengguna.'); }
-
-                        showToast(result.message, true);
-
-                        // Hapus baris dari tabel
-                        this.closest('tr').remove();
-
-                        // Update statistik tanpa reload
-                        document.getElementById('total-users-stat').textContent = result.totalUsers;
-                        document.getElementById('active-users-stat').textContent = result.activeUsers;
-                        document.getElementById('inactive-users-stat').textContent = result.inactiveUsers;
-
-                    } catch (error) {
-                        console.error('Terjadi kesalahan:', error);
-                        showToast(error.message, false);
-                    }
-                }
-            });
-        });
-    });
-    </script>
-    @endpush
-</x-app-admin-layout>
+</x-admin-layout>
