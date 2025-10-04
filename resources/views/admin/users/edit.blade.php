@@ -8,7 +8,7 @@ Edit Pengguna: {{ $user->name }}
         Edit Detail Pengguna
     </h2>
 
-    {{-- Menampilkan pesan sukses dari Controller (setelah update) --}}
+    {{-- Menampilkan pesan dari Controller --}}
     @if (session('success'))
         <div class="bg-teal-100 border border-teal-400 text-teal-700 px-4 py-3 rounded relative mb-4" role="alert">
             {{ session('success') }}
@@ -69,7 +69,6 @@ Edit Pengguna: {{ $user->name }}
             @enderror
         </div>
 
-
         {{-- === PERGANTIAN PASSWORD (Optional) === --}}
         <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200 mt-8 mb-4 border-t pt-4">Ganti Kata Sandi (Opsional)</h3>
 
@@ -108,3 +107,4 @@ Edit Pengguna: {{ $user->name }}
 </div>
 
 </x-app-admin-layout>
+

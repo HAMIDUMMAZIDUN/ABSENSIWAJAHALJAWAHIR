@@ -10,6 +10,7 @@
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=plus-jakarta-sans:400,600,700,800" rel="stylesheet" />
     <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
@@ -22,79 +23,120 @@
     </script>
 </head>
 <body class="font-sans bg-gray-100 dark:bg-gray-900">
-    <div class="flex h-screen">
-        {{-- SIDEBAR --}}
-        <aside class="w-64 flex-shrink-0 bg-white dark:bg-gray-800 shadow-lg">
-            <div class="p-4 text-2xl font-bold text-teal-600 dark:text-teal-400 border-b dark:border-gray-700 text-center">
-                Admin Panel
+    <div class="relative min-h-screen lg:flex">
+        
+        {{-- OVERLAY --}}
+        <div id="sidebar-overlay" class="fixed inset-0 bg-black bg-opacity-50 z-40 hidden lg:hidden"></div>
+
+        {{-- SIDEBAR (Desktop) --}}
+        <aside id="sidebar" class="fixed inset-y-0 left-0 bg-white dark:bg-gray-800 shadow-lg w-64 transform -translate-x-full transition-transform duration-300 ease-in-out lg:translate-x-0 lg:relative lg:inset-0 z-50">
+            <div class="flex justify-between items-center p-4 border-b dark:border-gray-700">
+                <span class="text-xl font-bold text-teal-600 dark:text-teal-400">
+                    Admin Al-Jawahir
+                </span>
+                <button id="close-sidebar-btn" class="text-gray-700 dark:text-gray-300 lg:hidden">
+                    <i data-feather="x" class="w-6 h-6"></i>
+                </button>
             </div>
-            <nav class="mt-4">
-                {{-- Link Dashboard (Sudah ada) --}}
-                <a href="{{ route('admin.dashboard') }}" 
-                   class="flex items-center px-6 py-3 mx-2 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700
-                          {{ request()->routeIs('admin.dashboard*') ? 'bg-gray-200 dark:bg-gray-700 font-bold' : '' }}">
-                    <i data-feather="grid" class="w-5 h-5"></i>
-                    <span class="ml-3">Dashboard</span>
-                </a>
+            <nav class="mt-4 flex flex-col justify-between h-[calc(100%-65px)]">
+                <div>
+                    {{-- Link Dashboard --}}
+                    <a href="{{ route('admin.dashboard') }}" 
+                       class="flex items-center px-6 py-3 mx-2 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700
+                              {{ request()->routeIs('admin.dashboard') ? 'bg-gray-200 dark:bg-gray-700 font-bold' : '' }}">
+                        <i data-feather="grid" class="w-5 h-5"></i>
+                        <span class="ml-3">Dashboard</span>
+                    </a>
+                    
+                    {{-- PENAMBAHAN BARU: Link Manajemen Pengguna --}}
+                    <a href="{{ route('admin.users.index') }}"
+                       class="flex items-center px-6 py-3 mx-2 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700
+                              {{ request()->routeIs('admin.users.*') ? 'bg-gray-200 dark:bg-gray-700 font-bold' : '' }}">
+                        <i data-feather="users" class="w-5 h-5"></i>
+                        <span class="ml-3">Manajemen Pengguna</span>
+                    </a>
 
-                {{-- ====================================================== --}}
-                {{-- PENAMBAHAN BARU: MENU REKAP, WAJAH, & PENGUMUMAN --}}
-                {{-- ====================================================== --}}
+                    {{-- Link Rekap Absensi --}}
+                    <a href="{{ route('admin.attendance.index') }}"
+                       class="flex items-center px-6 py-3 mx-2 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700
+                              {{ request()->routeIs('admin.attendance.*') ? 'bg-gray-200 dark:bg-gray-700 font-bold' : '' }}">
+                        <i data-feather="clipboard" class="w-5 h-5"></i>
+                        <span class="ml-3">Rekap Absensi</span>
+                    </a>
 
-                <a href="{{ route('admin.attendance.index') }}"
-                   class="flex items-center px-6 py-3 mx-2 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700
-                          {{ request()->routeIs('admin.attendance.*') ? 'bg-gray-200 dark:bg-gray-700 font-bold' : '' }}">
-                    <i data-feather="clipboard" class="w-5 h-5"></i>
-                    <span class="ml-3">Rekap Absensi</span>
-                </a>
+                    {{-- Link Daftar Wajah --}}
+                    <a href="{{ route('admin.faces.index') }}"
+                       class="flex items-center px-6 py-3 mx-2 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700
+                              {{ request()->routeIs('admin.faces.*') ? 'bg-gray-200 dark:bg-gray-700 font-bold' : '' }}">
+                        <i data-feather="smile" class="w-5 h-5"></i> {{-- ICON DIPERBARUI --}}
+                        <span class="ml-3">Daftar Wajah</span>
+                    </a>
 
-                <a href="{{ route('admin.faces.index') }}"
-                   class="flex items-center px-6 py-3 mx-2 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700
-                          {{ request()->routeIs('admin.faces.*') ? 'bg-gray-200 dark:bg-gray-700 font-bold' : '' }}">
-                    <i data-feather="users" class="w-5 h-5"></i>
-                    <span class="ml-3">Daftar Wajah</span>
-                </a>
+                    {{-- Link Pengumuman --}}
+                    <a href="{{ route('admin.announcements.index') }}"
+                       class="flex items-center px-6 py-3 mx-2 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700
+                              {{ request()->routeIs('admin.announcements.*') ? 'bg-gray-200 dark:bg-gray-700 font-bold' : '' }}">
+                        <i data-feather="bell" class="w-5 h-5"></i>
+                        <span class="ml-3">Pengumuman</span>
+                    </a>
+                </div>
 
-                <a href="{{ route('admin.announcements.index') }}"
-                   class="flex items-center px-6 py-3 mx-2 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700
-                          {{ request()->routeIs('admin.announcements.*') ? 'bg-gray-200 dark:bg-gray-700 font-bold' : '' }}">
-                    <i data-feather="bell" class="w-5 h-5"></i>
-                    <span class="ml-3">Pengumuman</span>
-                </a>
-
-                {{-- ====================================================== --}}
-                {{-- AKHIR PENAMBAHAN BARU --}}
-                {{-- ====================================================== --}}
+                {{-- Tombol Logout --}}
+                <div class="p-2">
+                    <form method="POST" action="{{ route('logout') }}" class="w-full">
+                        @csrf
+                        <button type="submit" class="flex items-center w-full px-6 py-3 text-left rounded-lg text-gray-700 dark:text-gray-300 hover:bg-red-100 dark:hover:bg-red-800/50">
+                            <i data-feather="log-out" class="w-5 h-5"></i>
+                            <span class="ml-3">Keluar</span>
+                        </button>
+                    </form>
+                </div>
             </nav>
-
-            <div class="absolute bottom-0 w-64 p-2">
-                <form method="POST" action="{{ route('logout') }}" class="w-full">
-                    @csrf
-                    <button type="submit" class="flex items-center w-full px-6 py-3 text-left rounded-lg text-gray-700 dark:text-gray-300 hover:bg-red-100 dark:hover:bg-red-800/50">
-                        <i data-feather="log-out" class="w-5 h-5"></i>
-                        <span class="ml-3">Keluar</span>
-                    </button>
-                </form>
-            </div>
         </aside>
 
         {{-- MAIN CONTENT AREA --}}
         <div class="flex-1 flex flex-col overflow-hidden">
             <header class="flex justify-between items-center p-4 bg-white dark:bg-gray-800 border-b dark:border-gray-700">
-            <h1 class="text-xl font-bold text-gray-800 dark:text-gray-200">{{ $title ?? 'Dashboard' }}</h1>
-            <div class="text-gray-600 dark:text-gray-300">
-                Selamat datang, {{ Auth::user()->name }}!
-            </div>
+                <div class="flex items-center">
+                    <button id="open-sidebar-btn" class="text-gray-800 dark:text-gray-200 mr-4 lg:hidden">
+                        <i data-feather="menu" class="w-6 h-6"></i>
+                    </button>
+                    <h1 class="text-xl font-bold text-gray-800 dark:text-gray-200">{{ $title ?? 'Dashboard' }}</h1>
+                </div>
             </header>
-            <main class="flex-1 overflow-y-auto p-6">
+            
+            <main class="flex-1 overflow-y-auto p-4 md:p-6 pb-20 lg:pb-6">
                 {{ $slot }}
             </main>
         </div>
     </div>
 
-    <script>
-        feather.replace();
-    </script>
+    {{-- BOTTOM NAVIGATION BAR (Mobile Only) --}}
+    <nav class="fixed bottom-0 left-0 right-0 h-16 bg-white dark:bg-gray-800 border-t dark:border-gray-700 flex justify-around items-center z-30 lg:hidden">
+        
+        <a href="{{ route('admin.dashboard') }}" class="flex flex-col items-center justify-center w-full h-full {{ request()->routeIs('admin.dashboard') ? 'text-teal-600 dark:text-teal-400' : 'text-gray-500 dark:text-gray-400' }} hover:text-teal-500 transition-colors">
+            <i data-feather="grid" class="w-6 h-6"></i>
+            <span class="text-xs mt-1">Dashboard</span>
+        </a>
+
+        {{-- PENAMBAHAN BARU: Link Pengguna --}}
+         <a href="{{ route('admin.users.index') }}" class="flex flex-col items-center justify-center w-full h-full {{ request()->routeIs('admin.users.*') ? 'text-teal-600 dark:text-teal-400' : 'text-gray-500 dark:text-gray-400' }} hover:text-teal-500 transition-colors">
+            <i data-feather="users" class="w-6 h-6"></i>
+            <span class="text-xs mt-1">Pengguna</span>
+        </a>
+
+        <a href="{{ route('admin.attendance.index') }}" class="flex flex-col items-center justify-center w-full h-full {{ request()->routeIs('admin.attendance.*') ? 'text-teal-600 dark:text-teal-400' : 'text-gray-500 dark:text-gray-400' }} hover:text-teal-500 transition-colors">
+            <i data-feather="clipboard" class="w-6 h-6"></i>
+            <span class="text-xs mt-1">Rekap</span>
+        </a>
+
+        <a href="{{ route('admin.announcements.index') }}" class="flex flex-col items-center justify-center w-full h-full {{ request()->routeIs('admin.announcements.*') ? 'text-teal-600 dark:text-teal-400' : 'text-gray-500 dark:text-gray-400' }} hover:text-teal-500 transition-colors">
+            <i data-feather="bell" class="w-6 h-6"></i>
+            <span class="text-xs mt-1">Info</span>
+        </a>
+    </nav>
+
     @stack('scripts')
 </body>
 </html>
+
