@@ -18,7 +18,7 @@
             <h2 class="text-lg font-bold text-gray-800 dark:text-gray-200 mb-4">Akun</h2>
             <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-700">
                 
-                <a href="{{ route('app.settings.username') }}" class="flex justify-between items-center p-4 group border-b border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
+                <a href="{{ route('settings.username') }}" class="flex justify-between items-center p-4 group border-b border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
                     <div class="flex items-center space-x-4">
                         <i data-feather="user" class="w-5 h-5 text-gray-500 dark:text-gray-400"></i>
                         <span class="font-semibold text-gray-800 dark:text-gray-200">Ganti Username</span>
@@ -26,7 +26,7 @@
                     <i data-feather="chevron-right" class="w-5 h-5 text-gray-400 group-hover:text-gray-600 dark:group-hover:text-gray-300"></i>
                 </a>
                 
-                <a href="{{ route('app.settings.password') }}" class="flex justify-between items-center p-4 group border-b border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
+                <a href="{{ route('settings.password') }}" class="flex justify-between items-center p-4 group border-b border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
                     <div class="flex items-center space-x-4">
                         <i data-feather="lock" class="w-5 h-5 text-gray-500 dark:text-gray-400"></i>
                         <span class="font-semibold text-gray-800 dark:text-gray-200">Ganti Kata Sandi</span>
@@ -34,7 +34,7 @@
                     <i data-feather="chevron-right" class="w-5 h-5 text-gray-400 group-hover:text-gray-600 dark:group-hover:text-gray-300"></i>
                 </a>
 
-                <a href="{{ route('app.settings.phone') }}" class="flex justify-between items-center p-4 group hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
+                <a href="{{ route('settings.phone') }}" class="flex justify-between items-center p-4 group hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
                     <div class="flex items-center space-x-4">
                         <i data-feather="phone" class="w-5 h-5 text-gray-500 dark:text-gray-400"></i>
                         <span class="font-semibold text-gray-800 dark:text-gray-200">Ganti No Handphone</span>
@@ -47,7 +47,7 @@
                     </div>
                 </a>
                 
-                <a href="{{ route('app.settings.face.create') }}" class="flex justify-between items-center p-4 group border-t border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
+                <a href="{{ route('settings.face.create') }}" class="flex justify-between items-center p-4 group border-t border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
                     <div class="flex items-center space-x-4">
                         <i data-feather="camera" class="w-5 h-5 text-gray-500 dark:text-gray-400"></i>
                         <span class="font-semibold text-gray-800 dark:text-gray-200">Daftar Wajah</span>
@@ -132,7 +132,7 @@
                 const type = this.dataset.type;
                 const status = this.checked;
 
-                fetch("{{ route('app.settings.notifications.update') }}", {
+                fetch("{{ route('settings.notifications.update') }}", {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -169,7 +169,7 @@
                     document.documentElement.classList.remove('dark');
                 }
 
-                fetch("{{ route('app.settings.theme.update') }}", {
+                fetch("{{ route('settings.theme.update') }}", {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',

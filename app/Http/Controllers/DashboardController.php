@@ -5,8 +5,10 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
-use App\Services\CalendarService; // Import Service yang sudah dibuat
-use App\Models\Attendance; // Import Model Attendance
+use App\Services\CalendarService;
+use App\Models\Attendance;
+use Illuminate\Support\Facades\Storage;
+use App\Models\Announcement; // 1. PASTIKAN MODEL INI DI-IMPORT
 
 class DashboardController extends Controller
 {
@@ -47,39 +49,36 @@ class DashboardController extends Controller
             ];
         }
         
-        // ------------------------------------------------------------------
-        // --- PERUBAHAN UTAMA: Mengambil Riwayat Absensi dari Database ---
-        // ------------------------------------------------------------------
-        
-        // Ambil 3 riwayat absensi terbaru dari database
+        // 3. Mengambil Riwayat Absensi dari Database
         $rawAttendanceHistory = Attendance::where('user_id', $user->id)
-                                          ->orderBy('created_at', 'desc')
-                                          ->take(3)
-                                          ->get();
-                                          
+                                            ->orderBy('created_at', 'desc')
+                                            ->take(3)
+                                            ->get();
+                                            
         $attendanceHistory = $rawAttendanceHistory->map(function ($record) {
-            // Menggunakan check_in_at sebagai waktu utama (karena created_at bisa saja berbeda)
             $date = $record->check_in_at ?? $record->created_at; 
             
             return [
-                'day' => $date->translatedFormat('l'), // Contoh: Senin
-                'date' => $date->translatedFormat('j F, h:i A'), // Contoh: 21 Oktober, 07:45 AM
+                'day' => $date->translatedFormat('l'),
+                'date' => $date->translatedFormat('j F, h:i A'),
                 'year' => $date->format('Y'),
-                'status' => $record->status, // Status: Hadir, Izin, etc.
-                // Menggunakan foto profil user sebagai default jika foto_path absen kosong
+                'status' => $record->status,
                 'photo' => $record->photo_path ? Storage::url($record->photo_path) : ($record->user->photo ? Storage::url($record->user->photo) : asset('images/default-avatar.png')),
             ];
         })->toArray();
+        
+        // 4. MENGAMBIL DATA PENGUMUMAN (BARIS PENTING)
+        $announcements = Announcement::where('is_active', true)->latest()->get();
 
-
-        // 4. Kirim semua data ke view
+        // 5. Kirim semua data ke view
         return view('dashboard.index', [
             'user' => $user,
             'today' => $today,
             'upcomingEvents' => $upcomingEvents,
             'allIslamicEvents' => $islamicEvents,
-            'attendanceHistory' => $attendanceHistory, // Data Real dari DB
+            'attendanceHistory' => $attendanceHistory,
             'nationalHolidays' => $nationalHolidays,
+            'announcements' => $announcements, // <-- PASTIKAN VARIABEL INI DIKIRIM
         ]);
     }
 }

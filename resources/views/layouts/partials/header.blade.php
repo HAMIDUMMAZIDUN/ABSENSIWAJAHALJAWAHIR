@@ -12,10 +12,10 @@
                 <a href="{{ route('app.dashboard') }}" class="px-3 py-2 rounded-md text-sm font-medium {{ request()->routeIs('app.dashboard') ? 'text-teal-500' : 'text-gray-700 dark:text-gray-300' }} hover:text-teal-500">
                     Beranda
                 </a>
-                <a href="{{ route('app.history') }}" class="px-3 py-2 rounded-md text-sm font-medium {{ request()->routeIs('app.history') ? 'text-teal-500' : 'text-gray-700 dark:text-gray-300' }} hover:text-teal-500">
+                <a href="{{ route('history') }}" class="px-3 py-2 rounded-md text-sm font-medium {{ request()->routeIs('history') ? 'text-teal-500' : 'text-gray-700 dark:text-gray-300' }} hover:text-teal-500">
                     Riwayat
                 </a>
-                <a href="{{ route('app.settings.index') }}" class="px-3 py-2 rounded-md text-sm font-medium {{ request()->routeIs('app.settings.*') ? 'text-teal-500' : 'text-gray-700 dark:text-gray-300' }} hover:text-teal-500">
+                <a href="{{ route('settings.index') }}" class="px-3 py-2 rounded-md text-sm font-medium {{ request()->routeIs('app.settings.*') ? 'text-teal-500' : 'text-gray-700 dark:text-gray-300' }} hover:text-teal-500">
                     Setelan
                 </a>
                 <a href="{{ route('profile.edit') }}" class="px-3 py-2 rounded-md text-sm font-medium {{ request()->routeIs('profile.edit') ? 'text-teal-500' : 'text-gray-700 dark:text-gray-300' }} hover:text-teal-500">

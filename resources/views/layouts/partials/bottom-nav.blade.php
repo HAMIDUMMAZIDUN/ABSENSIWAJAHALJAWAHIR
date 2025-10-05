@@ -3,19 +3,19 @@
         <div class="flex justify-around items-center h-full relative">
             
             {{-- Tombol Home/Dashboard --}}
-            <a href="{{ route('app.dashboard') }}" class="flex flex-col items-center justify-center w-full text-center {{ request()->routeIs('app.dashboard') ? 'text-teal-500' : 'text-gray-500 dark:text-gray-400' }} hover:text-teal-500 transition-colors duration-200">
+            <a href="{{ route('dashboard') }}" class="flex flex-col items-center justify-center w-full text-center {{ request()->routeIs('dashboard') ? 'text-teal-500' : 'text-gray-500 dark:text-gray-400' }} hover:text-teal-500 transition-colors duration-200">
                 <i data-feather="home" class="w-6 h-6"></i>
                 <span class="text-xs mt-1">Beranda</span>
             </a>
 
             {{-- Tombol Riwayat --}}
-            <a href="{{ route('app.history') }}" class="flex flex-col items-center justify-center w-full text-center {{ request()->routeIs('app.history') ? 'text-teal-500' : 'text-gray-500 dark:text-gray-400' }} hover:text-teal-500 transition-colors duration-200">
+            <a href="{{ route('history') }}" class="flex flex-col items-center justify-center w-full text-center {{ request()->routeIs('history') ? 'text-teal-500' : 'text-gray-500 dark:text-gray-400' }} hover:text-teal-500 transition-colors duration-200">
                 <i data-feather="archive" class="w-6 h-6"></i>
                 <span class="text-xs mt-1">Riwayat</span>
             </a>
 
             {{-- Tombol Scan (Tombol Tengah Menonjol) --}}
-            <a href="{{ route('app.scan') }}" class="absolute -top-10 left-1/2 -translate-x-1/2 
+            <a href="{{ route('scan') }}" class="absolute -top-10 left-1/2 -translate-x-1/2 
                     flex items-center justify-center w-20 h-20 
                     bg-teal-500 rounded-full border-4 border-white dark:border-gray-800 
                     text-white shadow-lg z-50 transform transition-transform 
@@ -24,7 +24,7 @@
             </a>
             
             {{-- Tombol Pengaturan --}}
-            <a href="{{ route('app.settings.index') }}" class="flex flex-col items-center justify-center w-full text-center {{ request()->routeIs('app.settings.*') ? 'text-teal-500' : 'text-gray-500 dark:text-gray-400' }} hover:text-teal-500 transition-colors duration-200">
+            <a href="{{ route('settings.index') }}" class="flex flex-col items-center justify-center w-full text-center {{ request()->routeIs('app.settings.*') ? 'text-teal-500' : 'text-gray-500 dark:text-gray-400' }} hover:text-teal-500 transition-colors duration-200">
                 <i data-feather="settings" class="w-6 h-6"></i>
                 <span class="text-xs mt-1">Setelan</span>
             </a>

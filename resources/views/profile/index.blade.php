@@ -7,7 +7,7 @@
                 <i data-feather="arrow-left" class="w-6 h-6 text-gray-800 dark:text-gray-200"></i>
             </a>
             <h1 class="text-xl font-bold text-gray-800 dark:text-gray-200">Profil Saya</h1>
-            <a href="{{ route('app.settings.index') }}" class="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">
+            <a href="{{ route('settings.index') }}" class="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">
                 <i data-feather="settings" class="w-6 h-6 text-gray-800 dark:text-gray-200"></i>
             </a>
         </header>
@@ -59,14 +59,14 @@
                         <i data-feather="smartphone" class="w-5 h-5 text-gray-500 dark:text-gray-400"></i>
                         <span class="font-semibold text-gray-800 dark:text-gray-200">No Handphone</span>
                     </div>
-                    <a href="{{ route('app.settings.phone') }}" class="flex items-center space-x-2 group">
+                    <a href="{{ route('settings.phone') }}" class="flex items-center space-x-2 group">
                         <span class="font-semibold text-gray-600 dark:text-gray-300 group-hover:text-teal-600 dark:group-hover:text-teal-400">
                             {{ Auth::user()->phone ?? 'Belum diatur' }}
                         </span>
                         <i data-feather="chevron-right" class="w-5 h-5 text-gray-400 group-hover:text-teal-600 dark:group-hover:text-teal-400"></i>
                     </a>
                 </div>
-                <a href="{{ route('app.settings.password') }}" class="flex justify-between items-center p-4 group hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
+                <a href="{{ route('settings.password') }}" class="flex justify-between items-center p-4 group hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
                     <div class="flex items-center space-x-4">
                         <i data-feather="lock" class="w-5 h-5 text-gray-500 dark:text-gray-400"></i>
                         <span class="font-semibold text-gray-800 dark:text-gray-200">Kata Sandi</span>

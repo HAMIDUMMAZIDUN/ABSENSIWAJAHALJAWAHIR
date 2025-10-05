@@ -1,7 +1,5 @@
 <x-app-layout>
-    {{-- Merombak total tema visual dashboard agar lebih modern dan estetik --}}
     <main class="p-6 pb-24 bg-slate-50 dark:bg-slate-900 min-h-screen">
-        {{-- Header dengan sentuhan personal --}}
         <header class="flex justify-between items-center mb-8">
             <div class="flex items-center space-x-4">
                 <img src="{{ Auth::user()->photo ? Storage::url(Auth::user()->photo) : asset('images/default-avatar.png') }}" alt="Avatar" class="w-12 h-12 rounded-full object-cover border-2 border-teal-500">
@@ -17,10 +15,9 @@
             </div>
         </header>
 
-        {{-- Banner Tanggal yang sekarang memicu modal kalender --}}
         <div x-data="{ open: false }" class="relative">
             <button @click="open = true" 
-                class="w-full text-left bg-gradient-to-br from-teal-500 to-teal-600 text-white p-6 rounded-2xl shadow-lg mb-10 transition-transform transform hover:-translate-y-1 active:scale-95">
+                    class="w-full text-left bg-gradient-to-br from-teal-500 to-teal-600 text-white p-6 rounded-2xl shadow-lg mb-10 transition-transform transform hover:-translate-y-1 active:scale-95">
                 <div class="flex justify-between items-center">
                     <div>
                         <p class="text-sm font-light opacity-80">{{ explode(',', $today)[0] }},</p>
@@ -30,41 +27,17 @@
                 </div>
             </button>
 
-            {{-- --- POP-UP MODAL KALENDER (Tetap) --- --}}
-            <div x-show="open" 
-                 x-transition:enter="ease-out duration-300" 
-                 x-transition:enter-start="opacity-0" 
-                 x-transition:enter-end="opacity-100" 
-                 x-transition:leave="ease-in duration-200" 
-                 x-transition:leave-start="opacity-100" 
-                 x-transition:leave-end="opacity-0"
-                 class="fixed inset-0 z-50 overflow-y-auto" 
-                 aria-labelledby="modal-title" 
-                 role="dialog" 
-                 aria-modal="true" 
-                 style="display: none;">
-                
+            <div x-show="open" x-transition:enter="ease-out duration-300" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100" x-transition:leave="ease-in duration-200" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0" class="fixed inset-0 z-50 overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true" style="display: none;">
                 <div class="fixed inset-0 bg-gray-900 bg-opacity-75 transition-opacity" @click="open = false"></div>
-
                 <div class="flex items-end justify-center min-h-full p-4 text-center sm:items-center sm:p-0">
-                    <div x-show="open"
-                         x-transition:enter="ease-out duration-300"
-                         x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
-                         x-transition:enter-end="opacity-100 translate-y-0 sm:scale-100"
-                         x-transition:leave="ease-in duration-200"
-                         x-transition:leave-start="opacity-100 translate-y-0 sm:scale-100"
-                         x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
-                         class="relative bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-xl transform transition-all sm:my-8 sm:w-full sm:max-w-lg w-full">
-                        
+                    <div x-show="open" x-transition:enter="ease-out duration-300" x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95" x-transition:enter-end="opacity-100 translate-y-0 sm:scale-100" x-transition:leave="ease-in duration-200" x-transition:leave-start="opacity-100 translate-y-0 sm:scale-100" x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95" class="relative bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-xl transform transition-all sm:my-8 sm:w-full sm:max-w-lg w-full">
                         <div class="bg-teal-500 dark:bg-teal-700 px-6 py-4">
                             <h3 class="text-lg font-bold text-white" id="modal-title">Kalender & Agenda</h3>
                         </div>
-                        
                         <div class="p-6">
                             <p class="text-sm font-semibold text-teal-600 dark:text-teal-400 mb-2">Tanggal saat ini:</p>
                             <p class="text-3xl font-extrabold text-gray-800 dark:text-gray-200 mb-6">{{ $today }}</p>
 
-                            {{-- HARI BESAR ISLAM --}}
                             <h4 class="mt-2 mb-3 text-md font-bold text-teal-600 dark:text-teal-400 border-t pt-4 dark:border-gray-700">Hari Besar Islam Mendatang</h4>
                             <div class="max-h-72 overflow-y-auto pr-2 mb-6">
                                 @php $currentYearDisplayIslamic = null; @endphp
@@ -89,9 +62,7 @@
                                 @endforelse
                             </div>
 
-                            {{-- HARI LIBUR NASIONAL --}}
                             <h4 class="mt-2 mb-3 text-md font-bold text-red-600 dark:text-red-400 border-t pt-4 dark:border-gray-700">Hari Libur Nasional</h4>
-                            
                             <div class="max-h-72 overflow-y-auto pr-2">
                                 @php $currentYearDisplayHoliday = null; @endphp
                                 @forelse($nationalHolidays as $holiday)
@@ -124,7 +95,6 @@
             </div>
         </div>
 
-        {{-- Kartu Acara Mendatang (Main View) --}}
         <section class="mb-10">
             <h2 class="text-lg font-bold text-gray-800 dark:text-gray-200 mb-4">Hari Besar Islam Terdekat</h2>
             <div class="flex space-x-4 overflow-x-auto pb-4 -mx-6 px-6">
@@ -143,16 +113,37 @@
             </div>
         </section>
 
-        {{-- Daftar Riwayat Absen yang Lebih Rapi (SEKARANG DARI DB) --}}
+        {{-- PERUBAHAN DI SINI: Bagian Pengumuman dipindahkan ke bawah "Hari Besar Islam Terdekat" --}}
+        @if($announcements->isNotEmpty())
+        <section class="mb-10">
+            <h2 class="text-lg font-bold text-gray-800 dark:text-gray-200 mb-4">Pengumuman</h2>
+            <div class="space-y-3">
+                @foreach($announcements as $announcement)
+                    @php
+                        $levelClasses = [
+                            'info' => 'bg-blue-100 border-blue-500 text-blue-700 dark:bg-blue-900/50 dark:border-blue-700 dark:text-blue-300',
+                            'warning' => 'bg-yellow-100 border-yellow-500 text-yellow-700 dark:bg-yellow-900/50 dark:border-yellow-700 dark:text-yellow-300',
+                            'danger' => 'bg-red-100 border-red-500 text-red-700 dark:bg-red-900/50 dark:border-red-700 dark:text-red-300',
+                        ];
+                        $alertClass = $levelClasses[$announcement->level] ?? $levelClasses['info'];
+                    @endphp
+                    <div class="{{ $alertClass }} border-l-4 p-4 rounded-r-lg" role="alert">
+                        <p class="font-bold">{{ $announcement->title }}</p>
+                        <p class="text-sm">{{ $announcement->content }}</p>
+                    </div>
+                @endforeach
+            </div>
+        </section>
+        @endif
+
         <section>
             <div class="flex justify-between items-center mb-4">
                 <h2 class="text-lg font-bold text-gray-800 dark:text-gray-200">Riwayat Absen Terakhir</h2>
-                <a href="{{ route('app.history') }}" class="text-sm font-semibold text-teal-600 dark:text-teal-400 hover:underline">Lihat Semua</a>
+                <a href="{{ route('history') }}" class="text-sm font-semibold text-teal-600 dark:text-teal-400 hover:underline">Lihat Semua</a>
             </div>
             <div class="space-y-3">
                 @forelse($attendanceHistory as $history)
                     @php
-                        // Tentukan warna badge berdasarkan status
                         $statusClasses = [
                             'Hadir' => 'bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300',
                             'Izin' => 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900 dark:text-yellow-300',
@@ -170,7 +161,6 @@
                                 <p class="text-xs text-gray-500 dark:text-gray-400">{{ $history['date'] }}</p>
                             </div>
                         </div>
-                        {{-- Tampilkan Status --}}
                         <span class="text-sm font-bold px-3 py-1 rounded-full {{ $badgeClass }}">
                             {{ $history['status'] }}
                         </span>

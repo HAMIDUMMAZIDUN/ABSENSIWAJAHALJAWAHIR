@@ -11,12 +11,12 @@
 
         {{-- Tab Filter dengan Desain Baru --}}
         <nav class="bg-white dark:bg-gray-800 p-1.5 rounded-full flex items-center mb-8 shadow-sm">
-            <a href="{{ route('app.history', ['filter' => 'tepat-waktu']) }}"
+            <a href="{{ route('history', ['filter' => 'tepat-waktu']) }}"
             class="flex-1 text-center py-2 px-4 rounded-full font-semibold transition-colors
                     {{ $filter == 'tepat-waktu' ? 'bg-teal-600 text-white shadow' : 'text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700' }}">
                 Tepat Waktu
             </a>
-            <a href="{{ route('app.history', ['filter' => 'terlambat']) }}"
+            <a href="{{ route('history', ['filter' => 'terlambat']) }}"
             class="flex-1 text-center py-2 px-4 rounded-full font-semibold transition-colors
                     {{ $filter == 'terlambat' ? 'bg-rose-600 text-white shadow' : 'text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700' }}">
                 Terlambat

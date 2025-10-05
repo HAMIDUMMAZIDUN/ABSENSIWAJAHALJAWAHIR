@@ -25,10 +25,8 @@
 <body class="font-sans bg-gray-100 dark:bg-gray-900">
     <div class="relative min-h-screen lg:flex">
         
-        {{-- OVERLAY --}}
         <div id="sidebar-overlay" class="fixed inset-0 bg-black bg-opacity-50 z-40 hidden lg:hidden"></div>
 
-        {{-- SIDEBAR (Desktop) --}}
         <aside id="sidebar" class="fixed inset-y-0 left-0 bg-white dark:bg-gray-800 shadow-lg w-64 transform -translate-x-full transition-transform duration-300 ease-in-out lg:translate-x-0 lg:relative lg:inset-0 z-50">
             <div class="flex justify-between items-center p-4 border-b dark:border-gray-700">
                 <span class="text-xl font-bold text-teal-600 dark:text-teal-400">
@@ -40,48 +38,37 @@
             </div>
             <nav class="mt-4 flex flex-col justify-between h-[calc(100%-65px)]">
                 <div>
-                    {{-- Link Dashboard --}}
                     <a href="{{ route('admin.dashboard') }}" 
-                       class="flex items-center px-6 py-3 mx-2 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700
-                              {{ request()->routeIs('admin.dashboard') ? 'bg-gray-200 dark:bg-gray-700 font-bold' : '' }}">
+                       class="flex items-center px-6 py-3 mx-2 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 {{ request()->routeIs('admin.dashboard') ? 'bg-gray-200 dark:bg-gray-700 font-bold' : '' }}">
                         <i data-feather="grid" class="w-5 h-5"></i>
                         <span class="ml-3">Dashboard</span>
                     </a>
                     
-                    {{-- PENAMBAHAN BARU: Link Manajemen Pengguna --}}
                     <a href="{{ route('admin.users.index') }}"
-                       class="flex items-center px-6 py-3 mx-2 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700
-                              {{ request()->routeIs('admin.users.*') ? 'bg-gray-200 dark:bg-gray-700 font-bold' : '' }}">
+                       class="flex items-center px-6 py-3 mx-2 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 {{ request()->routeIs('admin.users.*') ? 'bg-gray-200 dark:bg-gray-700 font-bold' : '' }}">
                         <i data-feather="users" class="w-5 h-5"></i>
                         <span class="ml-3">Manajemen Pengguna</span>
                     </a>
 
-                    {{-- Link Rekap Absensi --}}
                     <a href="{{ route('admin.attendance.index') }}"
-                       class="flex items-center px-6 py-3 mx-2 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700
-                              {{ request()->routeIs('admin.attendance.*') ? 'bg-gray-200 dark:bg-gray-700 font-bold' : '' }}">
+                       class="flex items-center px-6 py-3 mx-2 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 {{ request()->routeIs('admin.attendance.*') ? 'bg-gray-200 dark:bg-gray-700 font-bold' : '' }}">
                         <i data-feather="clipboard" class="w-5 h-5"></i>
                         <span class="ml-3">Rekap Absensi</span>
                     </a>
 
-                    {{-- Link Daftar Wajah --}}
                     <a href="{{ route('admin.faces.index') }}"
-                       class="flex items-center px-6 py-3 mx-2 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700
-                              {{ request()->routeIs('admin.faces.*') ? 'bg-gray-200 dark:bg-gray-700 font-bold' : '' }}">
-                        <i data-feather="smile" class="w-5 h-5"></i> {{-- ICON DIPERBARUI --}}
+                       class="flex items-center px-6 py-3 mx-2 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 {{ request()->routeIs('admin.faces.*') ? 'bg-gray-200 dark:bg-gray-700 font-bold' : '' }}">
+                        <i data-feather="smile" class="w-5 h-5"></i>
                         <span class="ml-3">Daftar Wajah</span>
                     </a>
 
-                    {{-- Link Pengumuman --}}
                     <a href="{{ route('admin.announcements.index') }}"
-                       class="flex items-center px-6 py-3 mx-2 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700
-                              {{ request()->routeIs('admin.announcements.*') ? 'bg-gray-200 dark:bg-gray-700 font-bold' : '' }}">
+                       class="flex items-center px-6 py-3 mx-2 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 {{ request()->routeIs('admin.announcements.*') ? 'bg-gray-200 dark:bg-gray-700 font-bold' : '' }}">
                         <i data-feather="bell" class="w-5 h-5"></i>
                         <span class="ml-3">Pengumuman</span>
                     </a>
                 </div>
 
-                {{-- Tombol Logout --}}
                 <div class="p-2">
                     <form method="POST" action="{{ route('logout') }}" class="w-full">
                         @csrf
@@ -94,7 +81,6 @@
             </nav>
         </aside>
 
-        {{-- MAIN CONTENT AREA --}}
         <div class="flex-1 flex flex-col overflow-hidden">
             <header class="flex justify-between items-center p-4 bg-white dark:bg-gray-800 border-b dark:border-gray-700">
                 <div class="flex items-center">
@@ -111,23 +97,27 @@
         </div>
     </div>
 
-    {{-- BOTTOM NAVIGATION BAR (Mobile Only) --}}
+    {{-- PERUBAHAN DI SINI: Navigasi Bawah disamakan dengan Sidebar --}}
     <nav class="fixed bottom-0 left-0 right-0 h-16 bg-white dark:bg-gray-800 border-t dark:border-gray-700 flex justify-around items-center z-30 lg:hidden">
-        
+    
         <a href="{{ route('admin.dashboard') }}" class="flex flex-col items-center justify-center w-full h-full {{ request()->routeIs('admin.dashboard') ? 'text-teal-600 dark:text-teal-400' : 'text-gray-500 dark:text-gray-400' }} hover:text-teal-500 transition-colors">
             <i data-feather="grid" class="w-6 h-6"></i>
             <span class="text-xs mt-1">Dashboard</span>
         </a>
 
-        {{-- PENAMBAHAN BARU: Link Pengguna --}}
-         <a href="{{ route('admin.users.index') }}" class="flex flex-col items-center justify-center w-full h-full {{ request()->routeIs('admin.users.*') ? 'text-teal-600 dark:text-teal-400' : 'text-gray-500 dark:text-gray-400' }} hover:text-teal-500 transition-colors">
+        <a href="{{ route('admin.users.index') }}" class="flex flex-col items-center justify-center w-full h-full {{ request()->routeIs('admin.users.*') ? 'text-teal-600 dark:text-teal-400' : 'text-gray-500 dark:text-gray-400' }} hover:text-teal-500 transition-colors">
             <i data-feather="users" class="w-6 h-6"></i>
             <span class="text-xs mt-1">Pengguna</span>
         </a>
 
         <a href="{{ route('admin.attendance.index') }}" class="flex flex-col items-center justify-center w-full h-full {{ request()->routeIs('admin.attendance.*') ? 'text-teal-600 dark:text-teal-400' : 'text-gray-500 dark:text-gray-400' }} hover:text-teal-500 transition-colors">
             <i data-feather="clipboard" class="w-6 h-6"></i>
-            <span class="text-xs mt-1">Rekap</span>
+            <span class="text-xs mt-1">Absensi</span>
+        </a>
+
+        <a href="{{ route('admin.faces.index') }}" class="flex flex-col items-center justify-center w-full h-full {{ request()->routeIs('admin.faces.*') ? 'text-teal-600 dark:text-teal-400' : 'text-gray-500 dark:text-gray-400' }} hover:text-teal-500 transition-colors">
+            <i data-feather="smile" class="w-6 h-6"></i>
+            <span class="text-xs mt-1">Wajah</span>
         </a>
 
         <a href="{{ route('admin.announcements.index') }}" class="flex flex-col items-center justify-center w-full h-full {{ request()->routeIs('admin.announcements.*') ? 'text-teal-600 dark:text-teal-400' : 'text-gray-500 dark:text-gray-400' }} hover:text-teal-500 transition-colors">
@@ -139,4 +129,3 @@
     @stack('scripts')
 </body>
 </html>
-

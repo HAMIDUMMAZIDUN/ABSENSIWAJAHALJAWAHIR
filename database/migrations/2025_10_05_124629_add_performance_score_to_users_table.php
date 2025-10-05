@@ -6,23 +6,18 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->boolean('is_active')->after('role')->default(true);
+            // Tambahkan kolom ini setelah kolom 'role'
+            $table->decimal('performance_score', 5, 2)->default(0.00)->after('role');
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->dropColumn('is_active');
+            $table->dropColumn('performance_score');
         });
     }
 };

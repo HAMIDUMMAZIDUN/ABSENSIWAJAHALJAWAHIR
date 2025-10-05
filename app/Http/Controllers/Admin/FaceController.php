@@ -4,33 +4,32 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\Face; // Asumsi Anda punya model bernama Face
-use App\Models\User; // Import model User
+use App\Models\User; // Langsung gunakan model User
 
 class FaceController extends Controller
 {
     /**
-     * Menampilkan halaman manajemen data wajah.
+     * Menampilkan halaman manajemen data wajah dari tabel users.
      */
     public function index(Request $request)
     {
-        // Query dasar untuk model Face dengan relasi ke User
-        // Eager loading 'user' untuk optimasi query
-        $query = Face::with('user')->latest();
+        // Query dasar langsung ke model User
+        $query = User::query()->latest();
 
-        // Logika untuk pencarian
+        // Logika untuk pencarian nama atau nip
         if ($request->filled('search')) {
             $searchTerm = $request->search;
-            $query->whereHas('user', function ($q) use ($searchTerm) {
+            $query->where(function($q) use ($searchTerm) {
                 $q->where('name', 'like', '%' . $searchTerm . '%')
-                  ->orWhere('nip', 'like', '%' . $searchTerm . '%'); // Asumsi ada kolom 'nip' di tabel user
+                  ->orWhere('nip', 'like', '%' . $searchTerm . '%');
             });
         }
 
         // Ambil data dengan paginasi
-        $faces = $query->paginate(10)->withQueryString(); // withQueryString agar filter tetap ada saat pindah halaman
+        // Ganti nama variabel dari $faces menjadi $users
+        $users = $query->paginate(10)->withQueryString();
 
         // Kirim data ke view
-        return view('admin.faces.index', compact('faces'));
+        return view('admin.faces.index', compact('users'));
     }
 }

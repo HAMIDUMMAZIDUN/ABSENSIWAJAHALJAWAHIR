@@ -13,7 +13,7 @@ use App\Http\Controllers\FaceScanController;
 
 // Admin Controllers
 use App\Http\Controllers\Admin\DashboardAdminController;
-use App\Http\Controllers\Admin\UserController; // PENAMBAHAN BARU
+use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\AttendanceController;
 use App\Http\Controllers\Admin\FaceController;
 use App\Http\Controllers\Admin\AnnouncementController;
@@ -29,21 +29,14 @@ Route::get('/dashboard', function () {
     if ($user && $user->role === 'admin') {
         return redirect()->route('admin.dashboard');
     }
-    return redirect()->route('app.dashboard');
+    // Pastikan baris ini sudah benar
+    return redirect()->route('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 
-// ===================================================================
-// Routes untuk Admin (Dilindungi oleh IsAdminMiddleware)
-// ===================================================================
+// Routes untuk Admin
 Route::middleware(['auth', IsAdminMiddleware::class])->prefix('admin')->name('admin.')->group(function () {
-    
-    // Rute Dashboard Utama
     Route::get('/dashboard', [DashboardAdminController::class, 'index'])->name('dashboard');
-
-    // ==================================================
-    // GROUP BARU: Rute Khusus Manajemen Pengguna
-    // ==================================================
     Route::prefix('users')->name('users.')->group(function () {
         Route::get('/', [UserController::class, 'index'])->name('index');
         Route::get('/{user}/edit', [UserController::class, 'edit'])->name('edit');
@@ -52,24 +45,19 @@ Route::middleware(['auth', IsAdminMiddleware::class])->prefix('admin')->name('ad
         Route::post('/{user}/toggle-status', [UserController::class, 'toggleUserStatus'])->name('toggle-status');
         Route::post('/bulk-status-update', [UserController::class, 'bulkStatusUpdate'])->name('bulk-status-update');
     });
-
-    // Rute Fitur Lainnya
     Route::get('/attendance', [AttendanceController::class, 'index'])->name('attendance.index');
     Route::get('/faces', [FaceController::class, 'index'])->name('faces.index');
-    Route::get('/announcements', [AnnouncementController::class, 'index'])->name('announcements.index');
+    Route::resource('announcements', AnnouncementController::class);
 });
 
 
-// ===================================================================
 // Routes untuk User Biasa/Aplikasi
-// ===================================================================
-Route::middleware(['auth', 'verified'])->prefix('app')->name('app.')->group(function () {
+Route::middleware(['auth', 'verified'])->prefix('app')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/riwayat', [HistoryController::class, 'index'])->name('history');
     Route::get('/scan', [FaceScanController::class, 'index'])->name('scan');
     Route::post('/scan/capture', [FaceScanController::class, 'capture'])->name('scan.capture');
 
-    // Route untuk Profil (dipindahkan ke grup sendiri untuk kerapian)
     Route::prefix('profile')->name('profile.')->group(function() {
         Route::get('/', [ProfileController::class, 'edit'])->name('edit');
         Route::patch('/', [ProfileController::class, 'update'])->name('update');
@@ -77,7 +65,6 @@ Route::middleware(['auth', 'verified'])->prefix('app')->name('app.')->group(func
         Route::post('/photo', [ProfileController::class, 'updatePhoto'])->name('photo.update');
     });
     
-    // Routes Pengaturan
     Route::prefix('settings')->name('settings.')->group(function () {
         Route::get('/', [SettingsController::class, 'index'])->name('index');
         Route::get('/username', [SettingsController::class, 'showUsernameForm'])->name('username');
@@ -94,4 +81,3 @@ Route::middleware(['auth', 'verified'])->prefix('app')->name('app.')->group(func
 });
 
 require __DIR__.'/auth.php';
-
