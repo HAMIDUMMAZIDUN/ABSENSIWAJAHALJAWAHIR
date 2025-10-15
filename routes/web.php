@@ -17,6 +17,8 @@ use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\AttendanceController;
 use App\Http\Controllers\Admin\FaceController;
 use App\Http\Controllers\Admin\AnnouncementController;
+// [TAMBAHAN] Mengimpor SettingsController dari folder Admin dengan alias
+use App\Http\Controllers\Admin\SettingsController as AdminSettingsController;
 
 
 Route::get('/', function () {
@@ -26,11 +28,13 @@ Route::get('/', function () {
 // Logika Pengalihan Role
 Route::get('/dashboard', function () {
     $user = Auth::user();
+
     if ($user && $user->role === 'admin') {
         return redirect()->route('admin.dashboard');
     }
-    // Pastikan baris ini sudah benar
-    return redirect()->route('dashboard');
+    
+    return redirect()->route('app.dashboard'); 
+    
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 
@@ -48,11 +52,14 @@ Route::middleware(['auth', IsAdminMiddleware::class])->prefix('admin')->name('ad
     Route::get('/attendance', [AttendanceController::class, 'index'])->name('attendance.index');
     Route::get('/faces', [FaceController::class, 'index'])->name('faces.index');
     Route::resource('announcements', AnnouncementController::class);
+
+    // [TAMBAHAN] Route untuk update tema di panel admin
+    Route::post('/settings/theme', [AdminSettingsController::class, 'updateTheme'])->name('settings.theme.update');
 });
 
 
 // Routes untuk User Biasa/Aplikasi
-Route::middleware(['auth', 'verified'])->prefix('app')->group(function () {
+Route::middleware(['auth', 'verified'])->prefix('app')->name('app.')->group(function () { 
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('/riwayat', [HistoryController::class, 'index'])->name('history');
     Route::get('/scan', [FaceScanController::class, 'index'])->name('scan');

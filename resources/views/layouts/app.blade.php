@@ -1,38 +1,90 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="csrf-token" content="{{ csrf_token() }}">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="{{ auth()->user()?->theme ?? 'light' }}">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 
-        <title>{{ config('app.name', 'Laravel') }}</title>
+    <title>{{ $title ?? config('app.name', 'Laravel') }}</title>
 
-        <link rel="preconnect" href="https://fonts.bunny.net">
-        <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
+    <link rel="preconnect" href="https://fonts.bunny.net">
+    <link href="https://fonts.bunny.net/css?family=plus-jakarta-sans:400,500,600,700&display=swap" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
 
-        @vite(['resources/css/app.css', 'resources/js/app.js'])
-    </head>
-    <body class="font-sans antialiased">
-        {{-- Latar belakang diatur permanen ke abu-abu terang --}}
-        <div class="min-h-screen bg-gray-100">
-            @isset($header)
-                {{-- Header diatur permanen ke warna putih --}}
-                <header class="bg-white shadow">
-                    <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-                        {{ $header }}
-                    </div>
-                </header>
-            @endisset
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
 
-            <main>
-                {{ $slot }}
-            </main>
-        </div>
+    <script>
+        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+        } else {
+            if ('{{ auth()->user()?->theme }}' === 'dark') {
+                 document.documentElement.classList.add('dark');
+            } else {
+                 document.documentElement.classList.remove('dark');
+            }
+        }
+    </script>
+</head>
+<body class="font-sans antialiased">
+    <div class="min-h-screen bg-gray-100 dark:bg-gray-900">
+        {{-- Navigasi ditambahkan di sini --}}
+        @include('layouts.navigation')
 
-        {{-- Skrip untuk Feather Icons --}}
-        <script src="https://unpkg.com/feather-icons"></script>
-        <script>
-            feather.replace();
-        </script>
-    </body>
+        @isset($header)
+            <header class="bg-white dark:bg-gray-800 shadow">
+                <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+                    {{ $header }}
+                </div>
+            </header>
+        @endisset
+
+        <main>
+            {{ $slot }}
+        </main>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const themeToggleBtn = document.getElementById('theme-toggle-user');
+            if(themeToggleBtn) {
+                const themeToggleDarkIcon = document.getElementById('theme-toggle-dark-icon-user');
+                const themeToggleLightIcon = document.getElementById('theme-toggle-light-icon-user');
+
+                function updateIcon() {
+                    if (document.documentElement.classList.contains('dark')) {
+                        themeToggleLightIcon.classList.remove('hidden');
+                        themeToggleDarkIcon.classList.add('hidden');
+                    } else {
+                        themeToggleDarkIcon.classList.remove('hidden');
+                        themeToggleLightIcon.classList.add('hidden');
+                    }
+                }
+
+                updateIcon();
+
+                themeToggleBtn.addEventListener('click', function() {
+                    document.documentElement.classList.toggle('dark');
+                    const newTheme = document.documentElement.classList.contains('dark') ? 'dark' : 'light';
+                    localStorage.setItem('theme', newTheme);
+                    updateIcon();
+
+                    // Menggunakan route untuk pengguna biasa
+                    fetch('{{ route("app.settings.theme.update") }}', { 
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                        },
+                        body: JSON.stringify({ theme: newTheme })
+                    })
+                    .catch(error => console.error('Error:', error));
+                });
+            }
+            
+            if (typeof feather !== 'undefined') {
+                feather.replace();
+            }
+        });
+    </script>
+</body>
 </html>

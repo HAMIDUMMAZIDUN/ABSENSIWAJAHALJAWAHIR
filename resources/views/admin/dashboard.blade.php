@@ -103,80 +103,98 @@
         document.addEventListener('DOMContentLoaded', function() {
             if (typeof feather !== 'undefined') { feather.replace(); }
 
-            const isDarkMode = document.documentElement.classList.contains('dark');
-            const textColor = isDarkMode ? '#E5E7EB' : '#4B5563';
-            const gridColor = isDarkMode ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)';
+            let recapChartInstance = null;
+            let attendanceChartInstance = null;
+            
+            // Definisikan data dari PHP ke variabel JS yang aman
+            const teachersPresent = {{ (int)($teachersPresent ?? 0) }};
+            const teachersAbsent = {{ (int)($teachersAbsent ?? 0) }};
+            const attendanceLabels = @json($attendanceLabels ?? []);
+            const attendanceData = @json($attendanceData ?? []);
 
-            const recapCtx = document.getElementById('attendanceRecapChart').getContext('2d');
-            new Chart(recapCtx, {
-                type: 'bar',
-                data: {
-                    labels: {!! $attendanceLabels !!},
-                    datasets: [{
-                        label: 'Jumlah Kehadiran',
-                        data: {!! $attendanceData !!},
-                        backgroundColor: 'rgba(99, 102, 241, 0.8)',
-                        borderColor: 'rgba(99, 102, 241, 1)',
-                        borderWidth: 1,
-                        borderRadius: 5,
-                    }]
-                },
-                options: {
-                    responsive: true, maintainAspectRatio: false,
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            ticks: { color: textColor, stepSize: 10 },
-                            grid: { color: gridColor }
-                        },
-                        x: { ticks: { color: textColor }, grid: { display: false } }
+            function renderCharts() {
+                if (recapChartInstance) { recapChartInstance.destroy(); }
+                if (attendanceChartInstance) { attendanceChartInstance.destroy(); }
+
+                const isDarkMode = document.documentElement.classList.contains('dark');
+                const textColor = isDarkMode ? '#E5E7EB' : '#4B5563';
+                const gridColor = isDarkMode ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)';
+                const borderColor = isDarkMode ? '#1F2937' : '#FFFFFF';
+
+                const recapCtx = document.getElementById('attendanceRecapChart').getContext('2d');
+                recapChartInstance = new Chart(recapCtx, {
+                    type: 'bar',
+                    data: {
+                        labels: attendanceLabels,
+                        datasets: [{
+                            label: 'Jumlah Kehadiran',
+                            data: attendanceData,
+                            backgroundColor: 'rgba(99, 102, 241, 0.8)',
+                            borderColor: 'rgba(99, 102, 241, 1)',
+                            borderWidth: 1,
+                            borderRadius: 5,
+                        }]
                     },
-                    plugins: { legend: { display: false } }
-                }
-            });
-
-            const attendanceCtx = document.getElementById('attendanceChart').getContext('2d');
-            new Chart(attendanceCtx, {
-                type: 'doughnut',
-                data: {
-                    labels: ['Hadir', 'Tidak Hadir'],
-                    datasets: [{
-                        data: [{{ $teachersPresent }}, {{ $teachersAbsent }}],
-                        backgroundColor: [
-                            'rgba(16, 185, 129, 1)',
-                            'rgba(239, 68, 68, 1)'
-                        ],
-                        borderColor: isDarkMode ? '#1F2937' : '#FFFFFF',
-                        borderWidth: 4,
-                        hoverOffset: 8
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    cutout: '75%',
-                    plugins: {
-                        legend: {
-                            display: false
+                    options: {
+                        responsive: true, maintainAspectRatio: false,
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                ticks: { color: textColor, stepSize: 10 },
+                                grid: { color: gridColor }
+                            },
+                            x: { ticks: { color: textColor }, grid: { display: false } }
                         },
-                        tooltip: {
-                            callbacks: {
-                                label: function(context) {
-                                    let label = context.label || '';
-                                    if (label) {
-                                        label += ': ';
+                        plugins: { legend: { display: false } }
+                    }
+                });
+
+                const attendanceCtx = document.getElementById('attendanceChart').getContext('2d');
+                attendanceChartInstance = new Chart(attendanceCtx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['Hadir', 'Tidak Hadir'],
+                        datasets: [{
+                            data: [teachersPresent, teachersAbsent],
+                            backgroundColor: [
+                                'rgba(16, 185, 129, 1)',
+                                'rgba(239, 68, 68, 1)'
+                            ],
+                            borderColor: borderColor,
+                            borderWidth: 4,
+                            hoverOffset: 8
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        cutout: '75%',
+                        plugins: {
+                            legend: { display: false },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        let label = context.label || '';
+                                        if (label) { label += ': '; }
+                                        if (context.parsed !== null) {
+                                            label += context.parsed + ' orang';
+                                        }
+                                        return label;
                                     }
-                                    if (context.parsed !== null) {
-                                        label += context.parsed + ' orang';
-                                    }
-                                    return label;
                                 }
                             }
                         }
                     }
-                }
+                });
+            }
+
+            renderCharts();
+
+            document.addEventListener('themeChanged', function() {
+                renderCharts();
             });
         });
     </script>
     @endpush
 </x-app-admin-layout>
+

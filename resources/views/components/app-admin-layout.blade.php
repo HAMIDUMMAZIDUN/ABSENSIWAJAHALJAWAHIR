@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="id" class="{{ auth()->user()?->theme ?? 'light' }}">
+<html lang="id" class="{{ auth()->user()?->theme ?? 'light' }}"> 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -18,7 +18,11 @@
         if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
             document.documentElement.classList.add('dark');
         } else {
-            document.documentElement.classList.remove('dark');
+            if ('{{ auth()->user()?->theme }}' === 'dark') {
+                 document.documentElement.classList.add('dark');
+            } else {
+                 document.documentElement.classList.remove('dark');
+            }
         }
     </script>
 </head>
@@ -69,7 +73,16 @@
                     </a>
                 </div>
 
-                <div class="p-2">
+                <div class="p-2 border-t dark:border-gray-700 mx-2">
+                    <div class="flex items-center justify-between px-4 py-3">
+                         <span class="text-sm font-medium text-gray-700 dark:text-gray-300">Ganti Tema</span>
+                         <div class="relative inline-flex items-center">
+                              <button id="theme-toggle" type="button" class="text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 rounded-lg text-sm p-2.5">
+                                   <i data-feather="sun" id="theme-toggle-light-icon" class="w-5 h-5 hidden"></i>
+                                   <i data-feather="moon" id="theme-toggle-dark-icon" class="w-5 h-5 hidden"></i>
+                              </button>
+                         </div>
+                    </div>
                     <form method="POST" action="{{ route('logout') }}" class="w-full">
                         @csrf
                         <button type="submit" class="flex items-center w-full px-6 py-3 text-left rounded-lg text-gray-700 dark:text-gray-300 hover:bg-red-100 dark:hover:bg-red-800/50">
@@ -97,35 +110,108 @@
         </div>
     </div>
 
-    {{-- PERUBAHAN DI SINI: Navigasi Bawah disamakan dengan Sidebar --}}
     <nav class="fixed bottom-0 left-0 right-0 h-16 bg-white dark:bg-gray-800 border-t dark:border-gray-700 flex justify-around items-center z-30 lg:hidden">
-    
         <a href="{{ route('admin.dashboard') }}" class="flex flex-col items-center justify-center w-full h-full {{ request()->routeIs('admin.dashboard') ? 'text-teal-600 dark:text-teal-400' : 'text-gray-500 dark:text-gray-400' }} hover:text-teal-500 transition-colors">
             <i data-feather="grid" class="w-6 h-6"></i>
             <span class="text-xs mt-1">Dashboard</span>
         </a>
-
         <a href="{{ route('admin.users.index') }}" class="flex flex-col items-center justify-center w-full h-full {{ request()->routeIs('admin.users.*') ? 'text-teal-600 dark:text-teal-400' : 'text-gray-500 dark:text-gray-400' }} hover:text-teal-500 transition-colors">
             <i data-feather="users" class="w-6 h-6"></i>
             <span class="text-xs mt-1">Pengguna</span>
         </a>
-
         <a href="{{ route('admin.attendance.index') }}" class="flex flex-col items-center justify-center w-full h-full {{ request()->routeIs('admin.attendance.*') ? 'text-teal-600 dark:text-teal-400' : 'text-gray-500 dark:text-gray-400' }} hover:text-teal-500 transition-colors">
             <i data-feather="clipboard" class="w-6 h-6"></i>
             <span class="text-xs mt-1">Absensi</span>
         </a>
-
         <a href="{{ route('admin.faces.index') }}" class="flex flex-col items-center justify-center w-full h-full {{ request()->routeIs('admin.faces.*') ? 'text-teal-600 dark:text-teal-400' : 'text-gray-500 dark:text-gray-400' }} hover:text-teal-500 transition-colors">
             <i data-feather="smile" class="w-6 h-6"></i>
             <span class="text-xs mt-1">Wajah</span>
         </a>
-
         <a href="{{ route('admin.announcements.index') }}" class="flex flex-col items-center justify-center w-full h-full {{ request()->routeIs('admin.announcements.*') ? 'text-teal-600 dark:text-teal-400' : 'text-gray-500 dark:text-gray-400' }} hover:text-teal-500 transition-colors">
             <i data-feather="bell" class="w-6 h-6"></i>
             <span class="text-xs mt-1">Info</span>
         </a>
     </nav>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const themeToggleBtn = document.getElementById('theme-toggle');
+            const themeToggleDarkIcon = document.getElementById('theme-toggle-dark-icon');
+            const themeToggleLightIcon = document.getElementById('theme-toggle-light-icon');
 
+            function updateIcon() {
+                if (document.documentElement.classList.contains('dark')) {
+                    themeToggleLightIcon.classList.remove('hidden');
+                    themeToggleDarkIcon.classList.add('hidden');
+                } else {
+                    themeToggleDarkIcon.classList.remove('hidden');
+                    themeToggleLightIcon.classList.add('hidden');
+                }
+            }
+
+            updateIcon();
+
+            themeToggleBtn.addEventListener('click', function() {
+                document.documentElement.classList.toggle('dark');
+                const newTheme = document.documentElement.classList.contains('dark') ? 'dark' : 'light';
+                localStorage.setItem('theme', newTheme);
+                updateIcon();
+
+                // Mengirim event agar halaman lain (seperti dashboard) bisa mendengarkan
+                document.dispatchEvent(new CustomEvent('themeChanged'));
+
+                fetch('{{ route("admin.settings.theme.update") }}', { 
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                    },
+                    body: JSON.stringify({ theme: newTheme })
+                })
+                .then(response => {
+                    if (!response.ok) { console.error('Network response was not ok'); }
+                    return response.json();
+                })
+                .then(data => {
+                    if(data.status !== 'success') { console.error('Gagal menyimpan tema ke server.'); }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+            });
+            
+            // Inisialisasi awal untuk sidebar dan feather icons
+            const openSidebarBtn = document.getElementById('open-sidebar-btn');
+            const closeSidebarBtn = document.getElementById('close-sidebar-btn');
+            const sidebar = document.getElementById('sidebar');
+            const sidebarOverlay = document.getElementById('sidebar-overlay');
+
+            if (openSidebarBtn) {
+                openSidebarBtn.addEventListener('click', () => {
+                    sidebar.classList.remove('-translate-x-full');
+                    sidebarOverlay.classList.remove('hidden');
+                });
+            }
+
+            if (closeSidebarBtn) {
+                closeSidebarBtn.addEventListener('click', () => {
+                    sidebar.classList.add('-translate-x-full');
+                    sidebarOverlay.classList.add('hidden');
+                });
+            }
+            
+            if (sidebarOverlay) {
+                sidebarOverlay.addEventListener('click', () => {
+                    sidebar.classList.add('-translate-x-full');
+                    sidebarOverlay.classList.add('hidden');
+                });
+            }
+
+            feather.replace();
+        });
+    </script>
+    
     @stack('scripts')
 </body>
 </html>
+

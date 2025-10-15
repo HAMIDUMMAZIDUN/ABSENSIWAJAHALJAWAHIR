@@ -14,12 +14,12 @@
 
     {{-- Tambahkan class dark mode --}}
     <nav class="flex border-b border-gray-200 dark:border-gray-700 mb-6">
-        <a href="{{ route('history', ['filter' => 'tepat-waktu']) }}" 
+        <a href="{{ route('app.history', ['filter' => 'tepat-waktu']) }}" 
            class="flex-1 text-center py-3 font-semibold 
                   {{ $filter == 'tepat-waktu' ? 'border-b-2 border-teal-600 text-teal-600 dark:text-teal-400' : 'text-gray-500 dark:text-gray-400' }}">
             Tepat Waktu
         </a>
-        <a href="{{ route('history', ['filter' => 'terlambat']) }}" 
+        <a href="{{ route('app.history', ['filter' => 'terlambat']) }}" 
            class="flex-1 text-center py-3 font-semibold 
                   {{ $filter == 'terlambat' ? 'border-b-2 border-teal-600 text-teal-600 dark:text-teal-400' : 'text-gray-500 dark:text-gray-400' }}">
             Terlambat
