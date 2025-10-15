@@ -69,7 +69,7 @@
                     updateIcon();
 
                     // Menggunakan route untuk pengguna biasa
-                    fetch('{{ route("app.settings.theme.update") }}', { 
+                    fetch('{{ route("settings.theme.update") }}', { 
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',

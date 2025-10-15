@@ -3,10 +3,12 @@
     <main class="p-6 pb-24 bg-slate-50 dark:bg-slate-900 min-h-screen">
         {{-- Header Halaman --}}
         <header class="flex items-center justify-between mb-8">
+            {{-- Tombol Kembali --}}
             <a href="{{ url()->previous() }}" class="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">
                 <i data-feather="arrow-left" class="w-6 h-6 text-gray-800 dark:text-gray-200"></i>
             </a>
             <h1 class="text-xl font-bold text-gray-800 dark:text-gray-200">Profil Saya</h1>
+            {{-- Tombol Pengaturan --}}
             <a href="{{ route('settings.index') }}" class="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">
                 <i data-feather="settings" class="w-6 h-6 text-gray-800 dark:text-gray-200"></i>
             </a>
@@ -31,7 +33,18 @@
         {{-- Kartu Profil Utama --}}
         <section class="mb-8">
             <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6 flex flex-col items-center text-center">
-                <img src="{{ Auth::user()->photo ? Storage::url(Auth::user()->photo) : asset('images/default-avatar.png') }}" alt="Foto Profil" class="w-24 h-24 rounded-full object-cover mb-4 border-4 border-teal-500">
+                
+                {{-- 
+                    CATATAN PENTING UNTUK MENAMPILKAN FOTO:
+                    1. Kode ini menggunakan helper `asset()` untuk membuat URL yang lebih andal.
+                    2. Pastikan Anda sudah menjalankan perintah `php artisan storage:link` di terminal.
+                       Ini akan membuat file di 'storage' dapat diakses dari folder 'public'.
+                    3. Pastikan method `updatePhoto` di `ProfileController` Anda menyimpan file
+                       TANPA awalan 'public/' di path database. Path yang benar adalah, contohnya:
+                       'profile-photos/namafile.jpg'
+                --}}
+                <img src="{{ Auth::user()->photo ? asset('storage/' . Auth::user()->photo) : asset('images/default-avatar.png') }}" alt="Foto Profil" class="w-24 h-24 rounded-full object-cover mb-4 border-4 border-teal-500">
+                
                 <h2 class="text-2xl font-bold text-gray-800 dark:text-gray-200">{{ Auth::user()->name }}</h2>
                 <p class="text-gray-500 dark:text-gray-400 mb-6">{{ Auth::user()->email }}</p>
 
@@ -51,7 +64,7 @@
             </div>
         </section>
 
-        {{-- Kartu Informasi & Aksi (tidak ada perubahan di sini) --}}
+        {{-- Kartu Informasi & Aksi --}}
         <section>
             <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-700">
                 <div class="flex justify-between items-center p-4 border-b border-gray-200 dark:border-gray-700">
@@ -84,3 +97,4 @@
     </main>
     @include('layouts.partials.bottom-nav', ['active' => 'profile'])
 </x-app-layout>
+

@@ -33,7 +33,8 @@ Route::get('/dashboard', function () {
         return redirect()->route('admin.dashboard');
     }
     
-    return redirect()->route('app.dashboard'); 
+    // [PERUBAHAN 1] Mengarahkan ke route 'home' yang baru untuk user
+    return redirect()->route('home'); 
     
 })->middleware(['auth', 'verified'])->name('dashboard');
 
@@ -58,9 +59,11 @@ Route::middleware(['auth', IsAdminMiddleware::class])->prefix('admin')->name('ad
 });
 
 
-// Routes untuk User Biasa/Aplikasi
-Route::middleware(['auth', 'verified'])->prefix('app')->name('app.')->group(function () { 
-    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+// [PERUBAHAN 2] ->name('app.') DIHAPUS dari grup ini untuk menyederhanakan nama route
+Route::middleware(['auth', 'verified'])->prefix('app')->group(function () { 
+
+    // [PERUBAHAN 3] Nama route diubah menjadi 'home' untuk menghindari konflik
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('home');
     Route::get('/riwayat', [HistoryController::class, 'index'])->name('history');
     Route::get('/scan', [FaceScanController::class, 'index'])->name('scan');
     Route::post('/scan/capture', [FaceScanController::class, 'capture'])->name('scan.capture');

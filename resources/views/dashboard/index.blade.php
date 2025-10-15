@@ -139,7 +139,7 @@
         <section>
             <div class="flex justify-between items-center mb-4">
                 <h2 class="text-lg font-bold text-gray-800 dark:text-gray-200">Riwayat Absen Terakhir</h2>
-                <a href="{{ route('app.history') }}" class="text-sm font-semibold text-teal-600 dark:text-teal-400 hover:underline">Lihat Semua</a>
+                <a href="{{ route('history') }}" class="text-sm font-semibold text-teal-600 dark:text-teal-400 hover:underline">Lihat Semua</a>
             </div>
             <div class="space-y-3">
                 @forelse($attendanceHistory as $history)
